@@ -18,6 +18,7 @@ import {
 import EsgCard from '../ui/EsgCard';
 import ProgressBar from '../ui/ProgressBar';
 import DataSourceBadge from '../ui/DataSourceBadge';
+import InfoTooltip from '../ui/InfoTooltip';
 import { 
   TrendingUp, 
   Award, 
@@ -26,18 +27,21 @@ import {
   AlertTriangle, 
   ArrowUpRight, 
   Info, 
-  Sparkles,
-  Calendar,
-  Layers,
-  FileCheck,
-  ShieldAlert
+  Sparkles, 
+  Calendar, 
+  Layers, 
+  FileCheck, 
+  ShieldAlert,
+  HelpCircle,
+  BookOpen
 } from 'lucide-react';
 
 export default function ExecutiveView({ 
   onNavigateToMap, 
   onNavigateToAnalyst, 
   onInspectMetric, 
-  liveAirQuality 
+  liveAirQuality,
+  citizenGuide = false
 }) {
   const [selectedDimension, setSelectedDimension] = useState('environmental');
   const [chartMetric, setChartMetric] = useState('co2');
@@ -50,7 +54,7 @@ export default function ExecutiveView({
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
       
-      {/* Top Banner: Executive Summary & Data Provenance Notice */}
+      {/* Top Banner: Executive Summary & Citizen Mode Helper */}
       <div className="bg-gradient-to-r from-blue-900/60 via-slate-800/80 to-emerald-950/40 p-6 rounded-2xl border border-slate-700/60 shadow-xl backdrop-blur-xl">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-2">
@@ -63,31 +67,54 @@ export default function ExecutiveView({
                 customLabel="Open-Meteo & ISPRA Integrati"
                 onClick={() => onInspectMetric && onInspectMetric('air_quality_pisa')}
               />
+              {citizenGuide && (
+                <span className="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-900/80 text-emerald-300 border border-emerald-500/50 flex items-center gap-1">
+                  <BookOpen className="w-3 h-3" /> Modalità Guida Cittadino Attiva
+                </span>
+              )}
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              Quadro Direzionale & Dimensioni ESG
+
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2">
+              <span>Quadro Direzionale & Dimensioni ESG</span>
+              <InfoTooltip term="CO2 Evitata" showCitizenBadge={citizenGuide} />
             </h2>
+
             <p className="text-sm text-slate-300 max-w-3xl leading-relaxed">
-              Sintesi delle performance di mobilità sostenibile del Comune di Pisa. I dati atmosferici e i calcoli delle emissioni sono <strong className="text-emerald-400">reali in tempo reale</strong>, mentre i flussi di mobilità e il catasto PEBA sono identificati come simulazioni di piano PUMS con relativa scheda tecnica di integrazione.
+              {citizenGuide ? (
+                <span>
+                  Benvenuto nella dashboard di Pisa! Questo cruscotto misura quanto la nostra città sta diventando più verde, accessibile a tutti e sostenibile. Sotto ogni card troverai una spiegazione semplice di cosa significano i numeri.
+                </span>
+              ) : (
+                <span>
+                  Sintesi delle performance di mobilità sostenibile del Comune di Pisa. Monitoraggio delle 4 dimensioni ESG, indicatori PNRR, serie storiche di decarbonizzazione e avanzamento infrastrutturale PUMS.
+                </span>
+              )}
             </p>
           </div>
 
           <div className="flex flex-wrap sm:flex-nowrap gap-3 items-center">
             <div className="bg-slate-900/80 p-3.5 rounded-xl border border-slate-700 text-center min-w-[140px]">
-              <div className="text-[11px] text-slate-400 font-medium">CO₂ Cumulata Anno</div>
+              <div className="text-[11px] text-slate-400 font-medium flex items-center justify-center gap-1">
+                <span>CO₂ Cumulata</span>
+                <InfoTooltip term="CO2 Evitata" showCitizenBadge={citizenGuide} />
+              </div>
               <div className="text-xl font-extrabold text-emerald-400 mt-0.5">1.420 t</div>
               <div className="text-[10px] text-emerald-300/80">+{surplusPercentage}% vs Target</div>
             </div>
+
             <div className="bg-slate-900/80 p-3.5 rounded-xl border border-slate-700 text-center min-w-[140px]">
-              <div className="text-[11px] text-slate-400 font-medium">PM10 Pisa Live</div>
-              <div className="text-xl font-extrabold text-blue-400 mt-0.5">{liveAirQuality?.pm10 ?? '18.2'} µg/m³</div>
-              <div className="text-[10px] text-emerald-300/80">✓ Sotto limite UE</div>
+              <div className="text-[11px] text-slate-400 font-medium flex items-center justify-center gap-1">
+                <span>Banchine PEBA</span>
+                <InfoTooltip term="PEBA / IAU" showCitizenBadge={citizenGuide} />
+              </div>
+              <div className="text-xl font-extrabold text-blue-400 mt-0.5">74.2%</div>
+              <div className="text-[10px] text-blue-300/80">+6.5% vs 2025</div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* SECTION 1: 4 ESG CARDS WITH BADGES */}
+      {/* SECTION 1: 4 ESG CARDS (WITH CITIZEN SUBTITLES AND TOOLTIPS) */}
       <div>
         <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
           <div>
@@ -96,11 +123,11 @@ export default function ExecutiveView({
               <span>Le 4 Dimensioni ESG (Environmental, Social, Economic, Governance)</span>
             </h3>
             <p className="text-xs text-slate-400">
-              Clicca sui badge in basso per visualizzare la sorgente reale o la roadmap di attivazione
+              Clicca sui badge per ispezionare l'origine dei dati e tocca l'icona (?) per la spiegazione accessibile
             </p>
           </div>
           <div className="text-xs text-slate-400 hidden sm:flex items-center gap-3">
-            <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> Conforme/Superato (#10B981)</span>
+            <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> Conforme (#10B981)</span>
             <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-amber-400"></span> In Monitoraggio (#F59E0B)</span>
             <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-rose-400"></span> Critico (#EF4444)</span>
           </div>
@@ -115,6 +142,7 @@ export default function ExecutiveView({
               onClick={() => setSelectedDimension(dimension.id)}
               onInspectMetric={onInspectMetric}
               liveAirQuality={liveAirQuality}
+              citizenGuide={citizenGuide}
             />
           ))}
         </div>
@@ -127,11 +155,12 @@ export default function ExecutiveView({
         <div className="lg:col-span-7 bg-slate-800/60 p-6 rounded-2xl border border-slate-700/60 backdrop-blur-xl shadow-xl space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-slate-700/50">
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <h3 className="text-base font-bold text-white flex items-center gap-2">
                   <TrendingUp className="w-5 h-5 text-emerald-400" />
                   <span>Serie Storica: CO₂ Evitata vs Target PUMS</span>
                 </h3>
+                <InfoTooltip term="CO2 Evitata" showCitizenBadge={citizenGuide} />
                 <DataSourceBadge
                   status="REAL_CALCULATED"
                   size="xs"
@@ -139,7 +168,9 @@ export default function ExecutiveView({
                 />
               </div>
               <p className="text-xs text-slate-400 mt-0.5">
-                Modello matematico basato su fattori di emissione ISPRA (0.135 kg CO₂/km)
+                {citizenGuide 
+                  ? "Ogni mese monitoriamo quante emissioni nocive abbiamo risparmiato rispetto all'obiettivo del Comune."
+                  : "Modello matematico basato su fattori di emissione ISPRA (0.135 kg CO₂/km)"}
               </p>
             </div>
 
@@ -157,13 +188,14 @@ export default function ExecutiveView({
               </button>
               <button
                 onClick={() => setChartMetric('modal')}
-                className={`px-3 py-1 rounded-md font-medium transition ${
+                className={`px-3 py-1 rounded-md font-medium transition flex items-center gap-1 ${
                   chartMetric === 'modal'
                     ? 'bg-blue-600 text-white shadow-sm'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
-                Quota Dolce %
+                <span>Modal Split %</span>
+                <InfoTooltip term="Modal Split" showCitizenBadge={citizenGuide} />
               </button>
             </div>
           </div>
@@ -244,7 +276,7 @@ export default function ExecutiveView({
                       color: '#f8fafc',
                       fontSize: '12px'
                     }}
-                    formatter={(val) => [`${val}%`, 'Quota Spostamenti Sostenibili']}
+                    formatter={(val) => [`${val}%`, 'Quota Spostamenti Sostenibili (Modal Split)']}
                   />
                   <Legend
                     verticalAlign="top"
@@ -252,7 +284,7 @@ export default function ExecutiveView({
                     wrapperStyle={{ fontSize: '12px' }}
                     formatter={() => (
                       <span className="text-blue-300 font-medium">
-                        Quota Modale Mobilità Dolce & Elettrica (%)
+                        Modal Split: Quota Mobilità Dolce & Elettrica (%)
                       </span>
                     )}
                   />
@@ -273,7 +305,7 @@ export default function ExecutiveView({
           <div className="pt-3 border-t border-slate-700/50 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-300 gap-2">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>Performance cumulativa annuale: <strong>+140 t CO₂</strong> oltre il target PUMS stabilito.</span>
+              <span>Performance cumulativa: <strong>+140 t CO₂</strong> rispetto agli obiettivi del piano.</span>
             </div>
             <button
               onClick={onNavigateToAnalyst}
@@ -294,7 +326,7 @@ export default function ExecutiveView({
                   <span>Obiettivi Comunali PUMS 2026</span>
                 </h3>
                 <p className="text-xs text-slate-400">
-                  Stato di attuazione delle opere e transizione modale programmata
+                  {citizenGuide ? "Stato di avanzamento dei cantieri e delle nuove piste ciclabili a Pisa" : "Stato di attuazione delle opere e transizione modale programmata"}
                 </p>
               </div>
               <span className="text-xs font-bold text-emerald-400 bg-emerald-950/60 px-2.5 py-1 rounded-full border border-emerald-800/50">

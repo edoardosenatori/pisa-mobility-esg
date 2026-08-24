@@ -7,13 +7,16 @@
 export const ESG_DIMENSIONS = {
   environmental: {
     id: 'environmental',
+    code: 'E.1',
     title: 'Environmental (E)',
     subtitle: 'Impatto Ambientale & Decarbonizzazione',
+    termKey: 'CO2 Evitata',
     primaryMetric: {
       value: '1.420',
       unit: 't CO₂ evitate',
       raw: 1420,
     },
+    citizenSubtitle: '🌳 Equivale a oltre 700 automobili tolte dal traffico cittadino.',
     delta: {
       value: '+14.8%',
       isPositive: true,
@@ -26,20 +29,23 @@ export const ESG_DIMENSIONS = {
     },
     description: 'Riduzione emissioni climalteranti e polveri sottili grazie allo shift verso mobilità dolce e TPL elettrico.',
     secondaryMetrics: [
-      { label: 'PM10 medio urbano', value: '18.2 µg/m³', delta: '-12.4%', status: 'green' },
-      { label: 'Quota Mobilità Dolce', value: '28.6%', delta: '+3.8%', status: 'green' },
+      { label: 'PM10 medio urbano', termKey: 'PM10 / NO2', value: '18.2 µg/m³', delta: '-12.4%', status: 'green', citizenNote: '✨ Aria Ottima (Ampiamente sotto la soglia di allerta UE di 50 µg/m³).' },
+      { label: 'Modal Split Dolce', termKey: 'Modal Split', value: '28.6%', delta: '+3.8%', status: 'green', citizenNote: '🚶‍♂️ Circa 3 pisani su 10 si muovono a piedi, in bici o in autobus.' },
       { label: 'Carburante risparmiato', value: '542.000 L', delta: '+15.2%', status: 'green' }
     ]
   },
   social: {
     id: 'social',
+    code: 'S.1',
     title: 'Social (S)',
     subtitle: 'Inclusività, PEBA & Utenze Deboli',
+    termKey: 'PEBA / IAU',
     primaryMetric: {
       value: '74.2%',
-      unit: 'Banchine PEBA conformi',
+      unit: 'Banchine PEBA (IAU)',
       raw: 74.2,
     },
+    citizenSubtitle: '🟢 Quasi 3 fermate su 4 sono accessibili a tutti senza gradini.',
     delta: {
       value: '+6.5%',
       isPositive: true,
@@ -53,19 +59,21 @@ export const ESG_DIMENSIONS = {
     description: 'Adeguamento fermate TPL con percorsi tattilo-vocali LOGES, rampe a norma e accessibilità poli universitari.',
     secondaryMetrics: [
       { label: 'Incidentalità utenze deboli', value: '-22.0%', delta: '-4.1%', status: 'green' },
-      { label: 'Indice Accessibilità Poli UniPi', value: '88/100', delta: '+5 pt', status: 'green' },
-      { label: 'Gradimento Ciclopi Sharing', value: '4.6 / 5', delta: '+0.3', status: 'green' }
+      { label: 'Indice Accessibilità UniPi', termKey: 'PEBA / IAU', value: '88/100', delta: '+5 pt', status: 'green' },
+      { label: 'Gradimento Ciclopi Sharing', termKey: 'GBFS / GTFS', value: '4.6 / 5', delta: '+0.3', status: 'green' }
     ]
   },
   economic: {
     id: 'economic',
-    title: 'Economic (E)',
+    code: 'Ec.1',
+    title: 'Economic (Ec)',
     subtitle: 'Efficienza & Risparmio per la Collettività',
     primaryMetric: {
       value: '€ 2.15 M',
       unit: 'Risparmio Diretto Cittadini',
       raw: 2150000,
     },
+    citizenSubtitle: '💶 Risparmio medio di ~142,50 €/mese per famiglia che sceglie mobilità attiva.',
     delta: {
       value: '+18.2%',
       isPositive: true,
@@ -85,13 +93,16 @@ export const ESG_DIMENSIONS = {
   },
   governance: {
     id: 'governance',
+    code: 'G.1',
     title: 'Governance (G)',
     subtitle: 'Attuazione PUMS, Trasparenza & Open Data',
+    termKey: 'SLA Risoluzione (IRS)',
     primaryMetric: {
       value: '68.0%',
       unit: 'Avanzamento PUMS 2030',
       raw: 68.0,
     },
+    citizenSubtitle: '📋 Risolto l\'84% delle segnalazioni di barriere o guasti dei cittadini.',
     delta: {
       value: '+3.0%',
       isPositive: true,
@@ -104,9 +115,9 @@ export const ESG_DIMENSIONS = {
     },
     description: 'Monitoraggio costante dei cantieri, rilascio Open Data certificati e gestione partecipata dei feedback civici.',
     secondaryMetrics: [
-      { label: 'Open Data Maturity Index', value: '96%', delta: '+4%', status: 'green' },
+      { label: 'Open Data Maturity Index', termKey: 'GBFS / GTFS', value: '96%', delta: '+4%', status: 'green' },
       { label: 'Trasparenza Fondi PNRR/UE', value: '100%', delta: '0%', status: 'green' },
-      { label: 'Tasso Risoluzione Segnalazioni', value: '84.2%', delta: '+7.1%', status: 'amber' }
+      { label: 'SLA Risoluzione Segnalazioni', termKey: 'SLA Risoluzione (IRS)', value: '84.2%', delta: '+7.1%', status: 'green' }
     ]
   }
 };

@@ -14,6 +14,7 @@ import {
 import { ANALYST_HOURLY_DATA } from '../../data/mockEsgData';
 import { exportToCSV, exportToJSON } from '../../utils/exportUtils';
 import DataSourceBadge from '../ui/DataSourceBadge';
+import InfoTooltip from '../ui/InfoTooltip';
 import { 
   Filter, 
   Users, 
@@ -29,10 +30,11 @@ import {
   Info,
   SlidersHorizontal,
   FileSpreadsheet,
-  Terminal
+  Terminal,
+  Sparkles
 } from 'lucide-react';
 
-export default function AnalystView({ onInspectMetric }) {
+export default function AnalystView({ onInspectMetric, citizenGuide = false }) {
   const [userTarget, setUserTarget] = useState('all');
   const [timeRange, setTimeRange] = useState('today');
   const [showSpeedTrend, setShowSpeedTrend] = useState(true);

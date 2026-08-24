@@ -14,6 +14,24 @@ export default function App() {
   const [toast, setToast] = useState(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
+  // Progressive Disclosure: Citizen Guide Mode (Persistent in localStorage)
+  const [citizenGuide, setCitizenGuide] = useState(() => {
+    try {
+      return localStorage.getItem('pm_esg_guide') === 'true';
+    } catch {
+      return false;
+    }
+  });
+
+  // Sync mode changes to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem('pm_esg_guide', citizenGuide);
+    } catch (e) {
+      console.warn('LocalStorage error:', e);
+    }
+  }, [citizenGuide]);
+
   // Live Real-Time Data State for Pisa
   const [liveAirQuality, setLiveAirQuality] = useState(null);
   const [liveWeather, setLiveWeather] = useState(null);
@@ -89,7 +107,7 @@ export default function App() {
   return (
     <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 font-sans selection:bg-emerald-500 selection:text-white">
       
-      {/* Institutional Navigation Header with Live Weather & AQI */}
+      {/* Institutional Navigation Header with Mode Switch */}
       <Header 
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 
@@ -98,6 +116,8 @@ export default function App() {
         liveWeather={liveWeather}
         liveAirQuality={liveAirQuality}
         onOpenDataModal={() => setIsModalOpen(true)}
+        citizenGuide={citizenGuide}
+        setCitizenGuide={setCitizenGuide}
       />
 
       {/* Main Viewport Container */}
@@ -108,6 +128,7 @@ export default function App() {
             onNavigateToAnalyst={() => setActiveTab('analyst')}
             onInspectMetric={handleInspectMetric}
             liveAirQuality={liveAirQuality}
+            citizenGuide={citizenGuide}
           />
         )}
 
@@ -115,12 +136,14 @@ export default function App() {
           <MapView 
             onTriggerCivicReport={() => setActiveTab('opendata')}
             onInspectMetric={handleInspectMetric}
+            citizenGuide={citizenGuide}
           />
         )}
 
         {activeTab === 'analyst' && (
           <AnalystView 
             onInspectMetric={handleInspectMetric}
+            citizenGuide={citizenGuide}
           />
         )}
 
@@ -128,6 +151,7 @@ export default function App() {
           <OpenDataView 
             onShowToast={showToast}
             onInspectMetric={handleInspectMetric}
+            citizenGuide={citizenGuide}
           />
         )}
       </main>

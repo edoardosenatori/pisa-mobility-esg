@@ -1,6 +1,7 @@
 import React from 'react';
-import { TrendingUp, TrendingDown, Leaf, Users, Euro, Landmark } from 'lucide-react';
+import { TrendingUp, TrendingDown, Leaf, Users, Euro, Landmark, Sparkles } from 'lucide-react';
 import DataSourceBadge from './DataSourceBadge';
+import InfoTooltip from './InfoTooltip';
 
 const iconMap = {
   environmental: Leaf,
@@ -33,11 +34,17 @@ const semaphoreStyles = {
   }
 };
 
-export default function EsgCard({ dimension, onClick, isSelected, onInspectMetric, liveAirQuality }) {
+export default function EsgCard({ 
+  dimension, 
+  onClick, 
+  isSelected, 
+  onInspectMetric, 
+  liveAirQuality,
+  citizenGuide = false 
+}) {
   const IconComponent = iconMap[dimension.id] || Leaf;
   const sem = semaphoreStyles[dimension.semaphore.status] || semaphoreStyles.green;
 
-  // Determine data status type
   const dataStatus = dimension.id === 'environmental' 
     ? 'REAL_LIVE' 
     : dimension.id === 'economic' 
@@ -49,12 +56,12 @@ export default function EsgCard({ dimension, onClick, isSelected, onInspectMetri
       onClick={onClick}
       className={`relative group rounded-2xl p-5 transition-all duration-300 cursor-pointer backdrop-blur-xl border flex flex-col justify-between ${
         isSelected
-          ? 'bg-slate-800/90 border-blue-500/80 ring-2 ring-blue-500/30 shadow-2xl scale-[1.02]'
-          : 'bg-slate-800/60 border-slate-700/60 hover:bg-slate-800/80 hover:border-slate-600 hover:shadow-xl'
+          ? 'bg-slate-800/95 border-blue-500/80 ring-2 ring-blue-500/40 shadow-2xl scale-[1.01]'
+          : 'bg-slate-800/70 border-slate-700/60 hover:bg-slate-800/90 hover:border-slate-600 hover:shadow-xl'
       }`}
     >
       <div>
-        {/* Header card with Dimension title & Semaphore Badge */}
+        {/* Top Header: Code badge, Title, Tooltip, and Semaphore */}
         <div className="flex items-start justify-between gap-2 mb-3">
           <div className="flex items-center gap-2.5">
             <div className={`p-2.5 rounded-xl ${
@@ -68,8 +75,17 @@ export default function EsgCard({ dimension, onClick, isSelected, onInspectMetri
             }`}>
               <IconComponent className="w-5 h-5" />
             </div>
+
             <div>
-              <h3 className="text-base font-bold text-white tracking-wide">{dimension.title}</h3>
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="font-mono text-[10px] font-bold text-slate-400 bg-slate-900 px-1.5 py-0.5 rounded border border-slate-700">
+                  {dimension.code}
+                </span>
+                <h3 className="text-base font-bold text-white tracking-wide">{dimension.title}</h3>
+                {dimension.termKey && (
+                  <InfoTooltip term={dimension.termKey} showCitizenBadge={citizenGuide} />
+                )}
+              </div>
               <p className="text-[11px] text-slate-400">{dimension.subtitle}</p>
             </div>
           </div>
@@ -77,7 +93,7 @@ export default function EsgCard({ dimension, onClick, isSelected, onInspectMetri
           {/* Semaphore Badge */}
           <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-[11px] font-semibold shrink-0 ${sem.bg} ${sem.border} ${sem.text} ${sem.glow}`}>
             <span className={`w-2 h-2 rounded-full ${sem.dot} animate-pulse-subtle`} />
-            <span>{dimension.semaphore.label}</span>
+            <span className="hidden sm:inline">{dimension.semaphore.label}</span>
           </div>
         </div>
 
@@ -87,9 +103,22 @@ export default function EsgCard({ dimension, onClick, isSelected, onInspectMetri
             <span className="text-3xl lg:text-4xl font-extrabold text-white tracking-tight">
               {dimension.primaryMetric.value}
             </span>
-            <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">
+            <span className="text-xs font-medium text-slate-300 uppercase tracking-wider">
               {dimension.primaryMetric.unit}
             </span>
+            {dimension.termKey && (
+              <InfoTooltip term={dimension.termKey} showCitizenBadge={citizenGuide} />
+            )}
+          </div>
+
+          {/* Progressive Disclosure Citizen Subtitle for Primary Metric */}
+          <div className={`overflow-hidden transition-all duration-300 ease-in-out ${
+            citizenGuide ? 'max-h-20 opacity-100 mt-2' : 'max-h-0 opacity-0 m-0'
+          }`}>
+            <div className="p-2 rounded-lg bg-emerald-950/70 border border-emerald-500/40 text-emerald-200 text-xs font-medium flex items-start gap-1.5 shadow-sm">
+              <Sparkles className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+              <span>{dimension.citizenSubtitle}</span>
+            </div>
           </div>
 
           {/* Delta Percentage */}
@@ -108,24 +137,37 @@ export default function EsgCard({ dimension, onClick, isSelected, onInspectMetri
           </div>
         </div>
 
-        {/* Description */}
+        {/* Technical Description */}
         <p className="text-xs text-slate-300/90 leading-relaxed mb-3 line-clamp-2">
           {dimension.description}
         </p>
 
-        {/* Secondary Metrics Mini-Grid */}
-        <div className="pt-3 border-t border-slate-700/60 grid grid-cols-3 gap-2">
+        {/* Secondary Metrics Grid */}
+        <div className="pt-3 border-t border-slate-700/60 grid grid-cols-1 sm:grid-cols-3 gap-2">
           {dimension.secondaryMetrics.map((sec, idx) => {
-            // If environmental, show live PM10 if available
             const displayVal = (dimension.id === 'environmental' && idx === 0 && liveAirQuality?.pm10)
-              ? `${liveAirQuality.pm10} µg/m³ (Live)`
+              ? `${liveAirQuality.pm10} µg/m³`
               : sec.value;
 
             return (
-              <div key={idx} className="bg-slate-900/60 rounded-lg p-2 border border-slate-800/80">
-                <div className="text-[10px] text-slate-400 truncate">{sec.label}</div>
-                <div className="text-xs font-bold text-white mt-0.5">{displayVal}</div>
-                <div className="text-[10px] text-emerald-400 font-medium">{sec.delta}</div>
+              <div key={idx} className="bg-slate-900/70 rounded-lg p-2 border border-slate-800 flex flex-col justify-between">
+                <div>
+                  <div className="text-[10px] text-slate-400 flex items-center justify-between gap-1">
+                    <span className="truncate">{sec.label}</span>
+                    {sec.termKey && (
+                      <InfoTooltip term={sec.termKey} showCitizenBadge={citizenGuide} />
+                    )}
+                  </div>
+                  <div className="text-xs font-bold text-white mt-0.5">{displayVal}</div>
+                  <div className="text-[10px] text-emerald-400 font-medium">{sec.delta}</div>
+                </div>
+
+                {/* Progressive Disclosure Note on secondary metric */}
+                {citizenGuide && sec.citizenNote && (
+                  <div className="mt-1.5 pt-1 border-t border-slate-800 text-[10px] text-emerald-300 leading-tight">
+                    {sec.citizenNote}
+                  </div>
+                )}
               </div>
             );
           })}

@@ -10,6 +10,7 @@ import {
 } from '../../data/dataTransparencyRegistry';
 import { exportToCSV, exportToJSON } from '../../utils/exportUtils';
 import DataSourceBadge from '../ui/DataSourceBadge';
+import InfoTooltip from '../ui/InfoTooltip';
 import { 
   TreePine, 
   Zap, 
@@ -34,14 +35,21 @@ import {
   ShieldCheck,
   Terminal,
   HelpCircle,
-  Cpu
+  Cpu,
+  ChevronDown,
+  ChevronUp,
+  TrendingUp,
+  CheckCircle,
+  Bike,
+  Wallet
 } from 'lucide-react';
 
-export default function OpenDataView({ onShowToast, onInspectMetric }) {
+export default function OpenDataView({ onShowToast, onInspectMetric, citizenGuide = false }) {
   // Open Data Table State
   const [searchTerm, setSearchTerm] = useState('');
   const [filterAsse, setFilterAsse] = useState('all');
   const [openDataList, setOpenDataList] = useState(OPEN_DATA_RECORDS);
+  const [isTableExpanded, setIsTableExpanded] = useState(false);
 
   // Civic Reports State (Persistent in localStorage)
   const [civicReports, setCivicReports] = useState(() => {
@@ -60,7 +68,6 @@ export default function OpenDataView({ onShowToast, onInspectMetric }) {
   const [photoPreview, setPhotoPreview] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Save to localStorage when reports change
   useEffect(() => {
     localStorage.setItem('pisa_civic_reports', JSON.stringify(civicReports));
   }, [civicReports]);
@@ -174,108 +181,97 @@ export default function OpenDataView({ onShowToast, onInspectMetric }) {
   return (
     <div className="space-y-10 animate-in fade-in duration-300">
       
-      {/* SECTION 1: CITIZEN ENGAGEMENT IMPACT COUNTERS */}
+      {/* 1. TOP SUMMARY CARDS (DIVULGATIVE AD ALTO IMPATTO CITTADINO) */}
       <div>
-        <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+        <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
           <div>
             <div className="flex items-center gap-2">
               <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                Impatto Partecipato
+                Pisa Smart City • Servizi per la Cittadinanza
               </span>
               <DataSourceBadge
                 status="REAL_CALCULATED"
-                customLabel="Formule ISPRA / EEA"
+                customLabel="Modello ACI & Statistiche Pisa"
+                size="xs"
                 onClick={() => onInspectMetric && onInspectMetric('co2_factors_ispra')}
               />
             </div>
             <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight mt-1">
-              Contatori Divulgativi dell'Impatto Ecologico & Sociale
+              Impatto Diretto & Informazioni Utili per i Cittadini
             </h2>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           
-          {/* Counter 1: Trees */}
-          <div className="bg-gradient-to-br from-slate-800/80 to-emerald-950/40 p-5 rounded-2xl border border-emerald-500/30 shadow-xl backdrop-blur-xl relative overflow-hidden group hover:border-emerald-500/60 transition">
+          {/* Card 1: Risparmio Pendolare Medio */}
+          <div className="bg-gradient-to-br from-slate-800/90 to-emerald-950/40 p-5 rounded-2xl border border-emerald-500/30 shadow-xl backdrop-blur-xl group hover:border-emerald-500/60 transition">
             <div className="flex items-start justify-between">
               <div className="p-3 rounded-xl bg-emerald-950/80 text-emerald-400 border border-emerald-800/60">
-                <TreePine className="w-6 h-6" />
+                <Wallet className="w-6 h-6" />
               </div>
-              <span className="text-[10px] font-bold text-emerald-300 bg-emerald-900/50 px-2 py-0.5 rounded-full border border-emerald-700/50">
-                Formula EEA (20 kg/albero)
+              <span className="text-[10px] font-bold text-emerald-300 bg-emerald-900/60 px-2 py-0.5 rounded-full border border-emerald-700/50">
+                Economia Famigliare
               </span>
             </div>
-            <div className="mt-4">
-              <div className="text-3xl font-black text-white tracking-tight">
-                {CITIZEN_METRICS.treesEquivalent.toLocaleString('it-IT')}
+            <div className="mt-3.5">
+              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                Risparmio Pendolare Medio
+              </span>
+              <div className="text-3xl font-black text-white tracking-tight mt-0.5">
+                142,50 €<span className="text-sm font-semibold text-emerald-400">/mese</span>
               </div>
-              <div className="text-xs font-semibold text-emerald-400 mt-0.5">Alberi Equivalenti Piantati</div>
-              <p className="text-[11px] text-slate-400 mt-2">
-                Capacità biologica stimata equivalente alla CO₂ annua evitata dalla mobilità attiva a Pisa.
+              <p className="text-xs text-slate-300 mt-2 font-medium">
+                Quanto risparmi lasciando l'auto a favore di TPL e bici.
               </p>
             </div>
           </div>
 
-          {/* Counter 2: Zero Emission KM */}
-          <div className="bg-gradient-to-br from-slate-800/80 to-blue-950/40 p-5 rounded-2xl border border-blue-500/30 shadow-xl backdrop-blur-xl relative overflow-hidden group hover:border-blue-500/60 transition">
+          {/* Card 2: Fasce Orarie Consigliate Bici */}
+          <div className="bg-gradient-to-br from-slate-800/90 to-blue-950/40 p-5 rounded-2xl border border-blue-500/30 shadow-xl backdrop-blur-xl group hover:border-blue-500/60 transition">
             <div className="flex items-start justify-between">
               <div className="p-3 rounded-xl bg-blue-950/80 text-blue-400 border border-blue-800/60">
-                <Zap className="w-6 h-6" />
+                <Bike className="w-6 h-6" />
               </div>
-              <span className="text-[10px] font-bold text-blue-300 bg-blue-900/50 px-2 py-0.5 rounded-full border border-blue-700/50">
-                Mobilità Dolce
+              <span className="text-[10px] font-bold text-blue-300 bg-blue-900/60 px-2 py-0.5 rounded-full border border-blue-700/50">
+                Consigli Mobilità
               </span>
             </div>
-            <div className="mt-4">
-              <div className="text-3xl font-black text-white tracking-tight">
-                {(CITIZEN_METRICS.kmZeroEmissions / 1000000).toFixed(2)} M km
+            <div className="mt-3.5">
+              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                <span>Fasce Orarie Consigliate Bici</span>
+                <InfoTooltip term="Modal Split" showCitizenBadge={citizenGuide} />
+              </span>
+              <div className="text-3xl font-black text-white tracking-tight mt-0.5">
+                10:00 - 12:00
               </div>
-              <div className="text-xs font-semibold text-blue-400 mt-0.5">Km a Zero Emissioni Percorsi</div>
-              <p className="text-[11px] text-slate-400 mt-2">
-                Totale spostamenti registrati tramite biciclette proprie, flotta Ciclopi e micromobilità.
+              <p className="text-xs text-slate-300 mt-2 font-medium">
+                Orario con minor congestione su Lungarni e Ponte di Mezzo.
               </p>
             </div>
           </div>
 
-          {/* Counter 3: Fuel Saved */}
-          <div className="bg-gradient-to-br from-slate-800/80 to-amber-950/40 p-5 rounded-2xl border border-amber-500/30 shadow-xl backdrop-blur-xl relative overflow-hidden group hover:border-amber-500/60 transition">
-            <div className="flex items-start justify-between">
-              <div className="p-3 rounded-xl bg-amber-950/80 text-amber-400 border border-amber-800/60">
-                <Fuel className="w-6 h-6" />
-              </div>
-              <span className="text-[10px] font-bold text-amber-300 bg-amber-900/50 px-2 py-0.5 rounded-full border border-amber-700/50">
-                Formula ISPRA (2.31 kg/L)
-              </span>
-            </div>
-            <div className="mt-4">
-              <div className="text-3xl font-black text-white tracking-tight">
-                {CITIZEN_METRICS.fuelSavedLiters.toLocaleString('it-IT')} L
-              </div>
-              <div className="text-xs font-semibold text-amber-400 mt-0.5">Carburante Non Consumato</div>
-              <p className="text-[11px] text-slate-400 mt-2">
-                Benzina e diesel evitati, con corrispondente azzeramento di idrocarburi e particolato nei Lungarni.
-              </p>
-            </div>
-          </div>
-
-          {/* Counter 4: Economic savings */}
-          <div className="bg-gradient-to-br from-slate-800/80 to-purple-950/40 p-5 rounded-2xl border border-purple-500/30 shadow-xl backdrop-blur-xl relative overflow-hidden group hover:border-purple-500/60 transition">
+          {/* Card 3: Stato Segnalazioni Barriere */}
+          <div className="bg-gradient-to-br from-slate-800/90 to-purple-950/40 p-5 rounded-2xl border border-purple-500/30 shadow-xl backdrop-blur-xl group hover:border-purple-500/60 transition">
             <div className="flex items-start justify-between">
               <div className="p-3 rounded-xl bg-purple-950/80 text-purple-400 border border-purple-800/60">
-                <Coins className="w-6 h-6" />
+                <CheckCircle className="w-6 h-6" />
               </div>
-              <span className="text-[10px] font-bold text-purple-300 bg-purple-900/50 px-2 py-0.5 rounded-full border border-purple-700/50">
-                Costi ACI 0.22 €/km
+              <span className="text-[10px] font-bold text-purple-300 bg-purple-900/60 px-2 py-0.5 rounded-full border border-purple-700/50 flex items-center gap-1">
+                <span>SLA Comune di Pisa</span>
+                <InfoTooltip term="SLA Risoluzione (IRS)" showCitizenBadge={citizenGuide} />
               </span>
             </div>
-            <div className="mt-4">
-              <div className="text-3xl font-black text-white tracking-tight">
-                € {(CITIZEN_METRICS.moneySavedCitizensEuros / 1000000).toFixed(2)} M
+            <div className="mt-3.5">
+              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                <span>Stato Segnalazioni Barriere</span>
+                <InfoTooltip term="PEBA / IAU" showCitizenBadge={citizenGuide} />
+              </span>
+              <div className="text-3xl font-black text-emerald-400 tracking-tight mt-0.5">
+                88% Risolte
               </div>
-              <div className="text-xs font-semibold text-purple-400 mt-0.5">Risparmio Collettivo Famiglie</div>
-              <p className="text-[11px] text-slate-400 mt-2">
-                Minori spese di sosta tariffata Pisamo, carburante e usura veicoli per residenti e studenti a Pisa.
+              <p className="text-xs text-slate-300 mt-2 font-medium">
+                Tempo medio di intervento: <strong>6 giorni lavorativi</strong>.
               </p>
             </div>
           </div>
@@ -283,7 +279,206 @@ export default function OpenDataView({ onShowToast, onInspectMetric }) {
         </div>
       </div>
 
-      {/* SECTION 2: TRANSPARENCY REGISTRY & REQUIREMENTS TABLE */}
+      {/* 2. CITIZEN ENGAGEMENT IMPACT COUNTERS */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <div className="bg-slate-800/60 p-4 rounded-xl border border-slate-700/60 backdrop-blur-xl">
+          <div className="flex items-center justify-between text-slate-400 text-xs mb-1">
+            <span className="flex items-center gap-1">
+              <span>Alberi Equivalenti</span>
+              <InfoTooltip term="CO2 Evitata" showCitizenBadge={citizenGuide} />
+            </span>
+            <TreePine className="w-4 h-4 text-emerald-400" />
+          </div>
+          <div className="text-2xl font-black text-white">
+            {CITIZEN_METRICS.treesEquivalent.toLocaleString('it-IT')}
+          </div>
+          <div className="text-[11px] text-emerald-400 mt-1">Capacità biologica assorbita</div>
+        </div>
+
+        <div className="bg-slate-800/60 p-4 rounded-xl border border-slate-700/60 backdrop-blur-xl">
+          <div className="flex items-center justify-between text-slate-400 text-xs mb-1">
+            <span className="flex items-center gap-1">
+              <span>Km Zero Emissioni</span>
+              <InfoTooltip term="Modal Split" showCitizenBadge={citizenGuide} />
+            </span>
+            <Zap className="w-4 h-4 text-blue-400" />
+          </div>
+          <div className="text-2xl font-black text-white">
+            {(CITIZEN_METRICS.kmZeroEmissions / 1000000).toFixed(2)} M km
+          </div>
+          <div className="text-[11px] text-blue-400 mt-1">Spostamenti a piedi, bici e sharing</div>
+        </div>
+
+        <div className="bg-slate-800/60 p-4 rounded-xl border border-slate-700/60 backdrop-blur-xl">
+          <div className="flex items-center justify-between text-slate-400 text-xs mb-1">
+            <span className="flex items-center gap-1">
+              <span>Carburante Non Consumato</span>
+              <InfoTooltip term="PM10 / NO2" showCitizenBadge={citizenGuide} />
+            </span>
+            <Fuel className="w-4 h-4 text-amber-400" />
+          </div>
+          <div className="text-2xl font-black text-white">
+            {CITIZEN_METRICS.fuelSavedLiters.toLocaleString('it-IT')} L
+          </div>
+          <div className="text-[11px] text-amber-400 mt-1">Idrocarburi azzerati nei Lungarni</div>
+        </div>
+
+        <div className="bg-slate-800/60 p-4 rounded-xl border border-slate-700/60 backdrop-blur-xl">
+          <div className="flex items-center justify-between text-slate-400 text-xs mb-1">
+            <span>Economia Civica</span>
+            <Coins className="w-4 h-4 text-purple-400" />
+          </div>
+          <div className="text-2xl font-black text-white">
+            € {(CITIZEN_METRICS.moneySavedCitizensEuros / 1000000).toFixed(2)} M
+          </div>
+          <div className="text-[11px] text-purple-400 mt-1">Meno carburante & sosta tariffata</div>
+        </div>
+
+      </div>
+
+      {/* 3. COLLAPSIBLE TECHNICAL DATASET TABLE */}
+      <div className="bg-slate-800/70 rounded-2xl border border-slate-700/70 backdrop-blur-xl shadow-xl overflow-hidden">
+        
+        {/* Accordion Header & Export Controls */}
+        <div className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-800/90 border-b border-slate-700/60">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                Open Data Istituzionale (CC-BY 4.0)
+              </span>
+              <span className="text-xs text-slate-400">Dataset interoperabili Comune di Pisa</span>
+            </div>
+            <h3 className="text-lg font-bold text-white tracking-tight mt-1 flex items-center gap-2">
+              <FileSpreadsheet className="w-5 h-5 text-blue-400" />
+              <span>Catalogo Rilevazioni Mobilità & ESG Pisa</span>
+            </h3>
+          </div>
+
+          {/* Export Buttons & Toggle Button */}
+          <div className="flex items-center gap-2.5 flex-wrap">
+            <button
+              onClick={() => {
+                exportToCSV(filteredRecords, 'pisa_pm_esg_opendata.csv');
+                if (onShowToast) onShowToast({ type: 'success', title: 'Export Completato', message: 'File CSV scaricato con successo.' });
+              }}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white transition shadow-sm cursor-pointer"
+              title="Scarica dati in CSV"
+            >
+              <Download className="w-3.5 h-3.5" /> Esporta CSV
+            </button>
+
+            <button
+              onClick={() => {
+                exportToJSON(filteredRecords, 'pisa_pm_esg_opendata.json');
+                if (onShowToast) onShowToast({ type: 'success', title: 'Export Completato', message: 'File JSON scaricato con successo.' });
+              }}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white transition shadow-sm cursor-pointer"
+              title="Scarica dati in JSON"
+            >
+              <Download className="w-3.5 h-3.5" /> Esporta JSON
+            </button>
+
+            {/* Accordion Expand/Collapse Trigger */}
+            <button
+              type="button"
+              onClick={() => setIsTableExpanded(!isTableExpanded)}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition border cursor-pointer ${
+                isTableExpanded 
+                  ? 'bg-slate-900 text-slate-200 border-slate-600' 
+                  : 'bg-blue-950/80 text-blue-300 border-blue-700/60 hover:bg-blue-900/60'
+              }`}
+            >
+              <span>{isTableExpanded ? 'Nascondi Tabella (12 Record)' : 'Mostra / Nascondi Tabella Dati Certificati Completa (12 Record)'}</span>
+              {isTableExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+            </button>
+          </div>
+        </div>
+
+        {/* Collapsible Content */}
+        {isTableExpanded && (
+          <div className="p-5 space-y-4 animate-in slide-in-from-top-2 duration-200">
+            
+            {/* Search and Filters */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="relative w-full sm:w-80">
+                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Cerca asse, tipo sensore, fonte..."
+                  className="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-4 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div className="flex items-center gap-2 w-full sm:w-auto">
+                <span className="text-xs text-slate-400 whitespace-nowrap">Filtra Asse:</span>
+                <select
+                  value={filterAsse}
+                  onChange={(e) => setFilterAsse(e.target.value)}
+                  className="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+                >
+                  <option value="all">Tutti gli Assi</option>
+                  <option value="Ponte di Mezzo">Ponte di Mezzo</option>
+                  <option value="Stazione">Stazione FS / Corso Italia</option>
+                  <option value="Fibonacci">Polo Fibonacci</option>
+                  <option value="Miracoli">Piazza dei Miracoli</option>
+                  <option value="Trammino">Ciclopista Trammino</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Table */}
+            <div className="overflow-x-auto rounded-xl border border-slate-700/80">
+              <table className="w-full text-xs text-left text-slate-300">
+                <thead className="bg-slate-900/90 text-slate-400 uppercase font-semibold border-b border-slate-700">
+                  <tr>
+                    <th className="px-4 py-3">ID Rilevazione</th>
+                    <th className="px-4 py-3">Data</th>
+                    <th className="px-4 py-3">Asse / Nodo Stradale</th>
+                    <th className="px-4 py-3">Tipologia Misura</th>
+                    <th className="px-4 py-3">Valore Misurato</th>
+                    <th className="px-4 py-3">Target PUMS</th>
+                    <th className="px-4 py-3">CO₂ Evitata</th>
+                    <th className="px-4 py-3">Fonte / Validazione</th>
+                    <th className="px-4 py-3">Stato</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-800">
+                  {filteredRecords.map((row) => (
+                    <tr key={row.id} className="hover:bg-slate-700/30 transition">
+                      <td className="px-4 py-3 font-mono font-bold text-blue-400">{row.id}</td>
+                      <td className="px-4 py-3 text-slate-400">{row.data}</td>
+                      <td className="px-4 py-3 font-semibold text-white">{row.asse}</td>
+                      <td className="px-4 py-3 text-slate-300">{row.tipo}</td>
+                      <td className="px-4 py-3 font-bold text-emerald-400">{row.valore}</td>
+                      <td className="px-4 py-3 text-slate-400">{row.targetPums}</td>
+                      <td className="px-4 py-3 text-slate-300">{row.co2EvitataKg !== 'N/A' ? `${row.co2EvitataKg} kg` : '-'}</td>
+                      <td className="px-4 py-3 text-slate-400">{row.fonte}</td>
+                      <td className="px-4 py-3">
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-950 text-emerald-300 border border-emerald-800/60">
+                          ✓ {row.stato}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="flex items-center justify-between text-xs text-slate-400 pt-1">
+              <span>Mostrati <strong>{filteredRecords.length}</strong> record certificati su {openDataList.length}</span>
+              <span className="flex items-center gap-1.5 text-blue-400">
+                <Building2 className="w-3.5 h-3.5" /> API REST Endpoint: <code>/api/v1/mobility/pisa</code>
+              </span>
+            </div>
+
+          </div>
+        )}
+      </div>
+
+      {/* 4. TRANSPARENCY REGISTRY & REQUIREMENTS TABLE */}
       <div className="bg-slate-800/70 p-6 rounded-2xl border border-purple-500/40 backdrop-blur-xl shadow-xl space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-700/60">
           <div>
@@ -291,13 +486,13 @@ export default function OpenDataView({ onShowToast, onInspectMetric }) {
               <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 flex items-center gap-1">
                 <ShieldCheck className="w-3.5 h-3.5" /> Matrice di Trasparenza Istituzionale
               </span>
-              <span className="text-xs text-slate-400">Specifica Dati Reali vs Virtuali</span>
+              <InfoTooltip term="GBFS / GTFS" showCitizenBadge={citizenGuide} />
             </div>
             <h3 className="text-lg font-bold text-white tracking-tight mt-1">
               Registro di Provenienza Dati & Requisiti per Attivazione Reale
             </h3>
             <p className="text-xs text-slate-300 mt-0.5">
-              Clicca su qualsiasi riga per aprire la scheda tecnica dettagliata con ente proprietario, standard e passaggi operativi.
+              Clicca su qualsiasi riga per aprire la specifica tecnica con ente proprietario, standard e passaggi operativi.
             </p>
           </div>
         </div>
@@ -351,122 +546,7 @@ export default function OpenDataView({ onShowToast, onInspectMetric }) {
         </div>
       </div>
 
-      {/* SECTION 3: OPEN DATA TABLE WITH REAL CSV/JSON EXPORTS */}
-      <div className="bg-slate-800/70 p-6 rounded-2xl border border-slate-700/70 backdrop-blur-xl shadow-xl space-y-5">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-700/60">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">
-                Open Data Istituzionale (CC-BY 4.0)
-              </span>
-              <span className="text-xs text-slate-400">Dataset interoperabili Comune di Pisa</span>
-            </div>
-            <h3 className="text-lg font-bold text-white tracking-tight mt-1 flex items-center gap-2">
-              <FileSpreadsheet className="w-5 h-5 text-blue-400" />
-              <span>Catalogo Rilevazioni Mobilità & ESG Pisa</span>
-            </h3>
-          </div>
-
-          {/* Export Buttons */}
-          <div className="flex items-center gap-2.5 flex-wrap">
-            <button
-              onClick={() => {
-                exportToCSV(filteredRecords, 'pisa_pm_esg_opendata.csv');
-                if (onShowToast) onShowToast({ type: 'success', title: 'Export Completato', message: 'File CSV scaricato con successo.' });
-              }}
-              className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white transition shadow-lg shadow-emerald-950/40 cursor-pointer"
-            >
-              <Download className="w-4 h-4" /> Esporta CSV
-            </button>
-            <button
-              onClick={() => {
-                exportToJSON(filteredRecords, 'pisa_pm_esg_opendata.json');
-                if (onShowToast) onShowToast({ type: 'success', title: 'Export Completato', message: 'File JSON scaricato con successo.' });
-              }}
-              className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white transition shadow-lg shadow-blue-950/40 cursor-pointer"
-            >
-              <Download className="w-4 h-4" /> Esporta JSON
-            </button>
-          </div>
-        </div>
-
-        {/* Search and Filters */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="relative w-full sm:w-80">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Cerca asse, tipo sensore, fonte..."
-              className="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-4 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          <div className="flex items-center gap-2 w-full sm:w-auto">
-            <span className="text-xs text-slate-400 whitespace-nowrap">Filtra Asse:</span>
-            <select
-              value={filterAsse}
-              onChange={(e) => setFilterAsse(e.target.value)}
-              className="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
-            >
-              <option value="all">Tutti gli Assi</option>
-              <option value="Ponte di Mezzo">Ponte di Mezzo</option>
-              <option value="Stazione">Stazione FS / Corso Italia</option>
-              <option value="Fibonacci">Polo Fibonacci</option>
-              <option value="Miracoli">Piazza dei Miracoli</option>
-              <option value="Trammino">Ciclopista Trammino</option>
-            </select>
-          </div>
-        </div>
-
-        {/* Table */}
-        <div className="overflow-x-auto rounded-xl border border-slate-700/80">
-          <table className="w-full text-xs text-left text-slate-300">
-            <thead className="bg-slate-900/90 text-slate-400 uppercase font-semibold border-b border-slate-700">
-              <tr>
-                <th className="px-4 py-3">ID Rilevazione</th>
-                <th className="px-4 py-3">Data</th>
-                <th className="px-4 py-3">Asse / Nodo Stradale</th>
-                <th className="px-4 py-3">Tipologia Misura</th>
-                <th className="px-4 py-3">Valore Misurato</th>
-                <th className="px-4 py-3">Target PUMS</th>
-                <th className="px-4 py-3">CO₂ Evitata</th>
-                <th className="px-4 py-3">Fonte / Validazione</th>
-                <th className="px-4 py-3">Stato</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-800">
-              {filteredRecords.map((row) => (
-                <tr key={row.id} className="hover:bg-slate-700/30 transition">
-                  <td className="px-4 py-3 font-mono font-bold text-blue-400">{row.id}</td>
-                  <td className="px-4 py-3 text-slate-400">{row.data}</td>
-                  <td className="px-4 py-3 font-semibold text-white">{row.asse}</td>
-                  <td className="px-4 py-3 text-slate-300">{row.tipo}</td>
-                  <td className="px-4 py-3 font-bold text-emerald-400">{row.valore}</td>
-                  <td className="px-4 py-3 text-slate-400">{row.targetPums}</td>
-                  <td className="px-4 py-3 text-slate-300">{row.co2EvitataKg !== 'N/A' ? `${row.co2EvitataKg} kg` : '-'}</td>
-                  <td className="px-4 py-3 text-slate-400">{row.fonte}</td>
-                  <td className="px-4 py-3">
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-950 text-emerald-300 border border-emerald-800/60">
-                      ✓ {row.stato}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <div className="flex items-center justify-between text-xs text-slate-400 pt-2">
-          <span>Mostrati <strong>{filteredRecords.length}</strong> record certificati su {openDataList.length}</span>
-          <span className="flex items-center gap-1.5 text-blue-400">
-            <Building2 className="w-3.5 h-3.5" /> API REST Endpoint: <code>/api/v1/mobility/pisa</code>
-          </span>
-        </div>
-      </div>
-
-      {/* SECTION 4: CROWDSOURCING & CIVIC REPORTING FORM */}
+      {/* 5. CROWDSOURCING & CIVIC REPORTING FORM */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
         {/* Form Column (6/12) */}
@@ -476,18 +556,14 @@ export default function OpenDataView({ onShowToast, onInspectMetric }) {
               <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">
                 Partecipazione Civica Attiva
               </span>
-              <DataSourceBadge
-                status="REAL_LIVE"
-                customLabel="Persistente nel Browser & Protocollo Live"
-                size="xs"
-              />
+              <InfoTooltip term="PEBA / IAU" showCitizenBadge={citizenGuide} />
             </div>
             <h3 className="text-lg font-bold text-white tracking-tight mt-1 flex items-center gap-2">
               <MessageSquare className="w-5 h-5 text-purple-400" />
               <span>Invia Segnalazione Civica (PEBA & Mobilità)</span>
             </h3>
             <p className="text-xs text-slate-300 mt-1">
-              Segnala barriere architettoniche, anomalie su piste ciclabili o malfunzionamenti degli stalli sharing. La segnalazione viene registrata, protocollata e memorizzata in locale.
+              Segnala barriere architettoniche, anomalie su piste ciclabili o malfunzionamenti degli stalli sharing. La segnalazione viene memorizzata in locale e protocollata.
             </p>
           </div>
 
@@ -590,8 +666,9 @@ export default function OpenDataView({ onShowToast, onInspectMetric }) {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
-                  Livello di Urgenza
+                <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1">
+                  <span>Livello di Urgenza</span>
+                  <InfoTooltip term="SLA Risoluzione (IRS)" showCitizenBadge={citizenGuide} />
                 </label>
                 <select
                   value={formData.priorita}

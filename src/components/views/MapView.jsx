@@ -4,6 +4,7 @@ import {
   PISA_PILOT_AXIS 
 } from '../../data/mockEsgData';
 import DataSourceBadge from '../ui/DataSourceBadge';
+import InfoTooltip from '../ui/InfoTooltip';
 import { 
   Layers, 
   Bike, 
@@ -15,16 +16,16 @@ import {
   Navigation, 
   Sparkles, 
   Maximize2, 
-  RotateCcw,
-  Zap,
-  Eye,
-  SlidersHorizontal,
-  Plus,
-  Terminal,
-  ExternalLink
+  RotateCcw, 
+  Zap, 
+  Eye, 
+  SlidersHorizontal, 
+  Plus, 
+  Terminal, 
+  ExternalLink 
 } from 'lucide-react';
 
-export default function MapView({ onTriggerCivicReport, onInspectMetric }) {
+export default function MapView({ onTriggerCivicReport, onInspectMetric, citizenGuide = false }) {
   const [showBikeLanes, setShowBikeLanes] = useState(true);
   const [showSharing, setShowSharing] = useState(true);
   const [showPeba, setShowPeba] = useState(true);

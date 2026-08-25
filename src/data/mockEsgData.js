@@ -416,8 +416,134 @@ export const PISA_PILOT_AXIS = {
       position: [43.7205, 10.3990],
       note: 'Criticità segnalata dalla Consulta Disabilità'
     }
+  ],
+  trafficSegments: [
+    {
+      id: 'traf-1',
+      name: 'Lungarno Pacinotti & Lungarno Mediceo',
+      type: 'Arteria Principale Nord Arno',
+      congestionPercent: 78,
+      status: 'congested',
+      statusLabel: 'Rallentamenti / Congestione',
+      color: '#EF4444', // Rosso
+      avgSpeedCar: 14.5,
+      avgSpeedBike: 20.0,
+      delayMinutes: '+8 min',
+      bikeAdvantage: 'Bici più veloce di 8 min rispetto all\'auto',
+      coordinates: [
+        [43.7155, 10.3920],
+        [43.7163, 10.3970],
+        [43.7166, 10.4019],
+        [43.7172, 10.4080],
+        [43.7180, 10.4130]
+      ]
+    },
+    {
+      id: 'traf-2',
+      name: 'Ponte di Mezzo & Piazza Garibaldi (ZTL)',
+      type: 'Varco ZTL & Ponte Storico',
+      congestionPercent: 22,
+      status: 'fluid',
+      statusLabel: 'Fluido (Accesso Regolato ZTL)',
+      color: '#10B981', // Verde
+      avgSpeedCar: 12.0,
+      avgSpeedBike: 16.0,
+      delayMinutes: '0 min',
+      bikeAdvantage: 'Priorità assoluta a bici e pedoni',
+      coordinates: [
+        [43.7161, 10.4015],
+        [43.7166, 10.4019],
+        [43.7175, 10.4023]
+      ]
+    },
+    {
+      id: 'traf-3',
+      name: 'Viale Bonanno Pisano ➔ Piazza dei Miracoli',
+      type: 'Asse Turistico Porta Nuova',
+      congestionPercent: 65,
+      status: 'moderate',
+      statusLabel: 'Traffico Sostenuto (Bus Turistici)',
+      color: '#F59E0B', // Giallo
+      avgSpeedCar: 18.0,
+      avgSpeedBike: 21.0,
+      delayMinutes: '+4 min',
+      bikeAdvantage: 'Bici consigliata per evitare stop & go',
+      coordinates: [
+        [43.7190, 10.3900],
+        [43.7210, 10.3925],
+        [43.7225, 10.3950],
+        [43.7230, 10.3966]
+      ]
+    },
+    {
+      id: 'traf-4',
+      name: 'Corso Italia ➔ Stazione FS (Piazza Vitt. Emanuele)',
+      type: 'Corridoio Pedonale/Ciclabile Nord-Sud',
+      congestionPercent: 30,
+      status: 'fluid',
+      statusLabel: 'Fluido (Area Pedonale & Bus Elettrici)',
+      color: '#10B981',
+      avgSpeedCar: 15.0,
+      avgSpeedBike: 18.5,
+      delayMinutes: '0 min',
+      bikeAdvantage: 'Attraversamento fluido in 4 minuti',
+      coordinates: [
+        [43.7085, 10.3986],
+        [43.7120, 10.3998],
+        [43.7145, 10.4010],
+        [43.7161, 10.4015]
+      ]
+    },
+    {
+      id: 'traf-5',
+      name: 'Asse Fibonacci ➔ Viale delle Piagge',
+      type: 'Corridoio Universitario & Fiume Arno',
+      congestionPercent: 25,
+      status: 'fluid',
+      statusLabel: 'Scorrevole (Alta ciclabilità)',
+      color: '#10B981',
+      avgSpeedCar: 28.0,
+      avgSpeedBike: 22.0,
+      delayMinutes: '0 min',
+      bikeAdvantage: 'Percorso verde consigliato',
+      coordinates: [
+        [43.7196, 10.4075],
+        [43.7190, 10.4130],
+        [43.7185, 10.4180],
+        [43.7170, 10.4250]
+      ]
+    },
+    {
+      id: 'traf-6',
+      name: 'Asse Stazione FS ➔ Ospedale Cisanello',
+      type: 'Direttrice TPL LAM Rossa',
+      congestionPercent: 72,
+      status: 'congested',
+      statusLabel: 'Congestione Oraria (Uffici & Sanità)',
+      color: '#EF4444',
+      avgSpeedCar: 16.0,
+      avgSpeedBike: 20.0,
+      delayMinutes: '+7 min',
+      bikeAdvantage: 'Corsia ciclabile Cisanello +7 min risparmiati',
+      coordinates: [
+        [43.7085, 10.3986],
+        [43.7095, 10.4120],
+        [43.7080, 10.4260],
+        [43.7075, 10.4400]
+      ]
+    }
   ]
 };
+
+// Strategic Focus Points for Pisa Map FlyTo
+export const PISA_QUICK_NODES = [
+  { id: 'all', name: '🌍 Vista Totale Asse', coords: [43.7167, 10.4019], zoom: 14 },
+  { id: 'stazione', name: '🚉 Stazione FS', coords: [43.7085, 10.3986], zoom: 16 },
+  { id: 'ponte', name: '🌉 Ponte di Mezzo', coords: [43.7166, 10.4019], zoom: 16 },
+  { id: 'fibonacci', name: '🎓 Polo Fibonacci', coords: [43.7196, 10.4075], zoom: 16 },
+  { id: 'miracoli', name: '🏛️ Piazza dei Miracoli', coords: [43.7230, 10.3966], zoom: 16 },
+  { id: 'cisanello', name: '🏥 Polo Cisanello', coords: [43.7075, 10.4400], zoom: 15 }
+];
 
 // Dati Analitici Bivariati: Passaggi Orari Bici vs Saturazione Bus TPL
 export const ANALYST_HOURLY_DATA = {

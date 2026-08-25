@@ -181,18 +181,21 @@ export default function MapView({ onTriggerCivicReport, onInspectMetric, citizen
       });
     }
 
-    // 3. Corridor line
-    if (showCorridor) {
-      const corridorLine = L.polyline(PISA_PILOT_AXIS.corridorPath, {
-        color: '#38BDF8',
-        weight: 5,
-        opacity: 0.9,
-        dashArray: '8, 8',
-        lineCap: 'round'
-      }).addTo(layerGroup);
+    // 3. Corridor line branches (Clean road network without crossing buildings)
+    if (showCorridor && PISA_PILOT_AXIS.corridorBranches) {
+      PISA_PILOT_AXIS.corridorBranches.forEach((branch) => {
+        const corridorLine = L.polyline(branch.coordinates, {
+          color: '#38BDF8',
+          weight: 6,
+          opacity: 0.9,
+          dashArray: '8, 8',
+          lineCap: 'round',
+          lineJoin: 'round'
+        }).addTo(layerGroup);
 
-      corridorLine.bindTooltip("<b>Asse Pilota Pisa (OSM Reale)</b><br/>Stazione FS ⇄ Polo Fibonacci ⇄ Miracoli", {
-        sticky: true
+        corridorLine.bindTooltip(`<b>${branch.name}</b><br/>Tracciato stradale reale OpenStreetMap`, {
+          sticky: true
+        });
       });
     }
 

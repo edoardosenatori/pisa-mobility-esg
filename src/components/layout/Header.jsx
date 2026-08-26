@@ -220,9 +220,11 @@ export default function Header({
               </div>
             </div>
 
-            {/* Branch collaborator test badge — feature/collab-test-preview */}
+            {/* Branch collaborator test badge — signed by Grok (xAI) · Jacopo */}
             <span
               data-testid="collaborator-badge"
+              data-signed-by="Grok (xAI) · Jacopo"
+              title="Firmato da Grok (xAI) · Jacopo"
               className="inline-flex min-h-11 items-center gap-2 rounded-full bg-emerald-950/80 px-3 py-1.5 text-xs font-medium text-emerald-200 border border-emerald-500/50 whitespace-nowrap"
             >
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" />

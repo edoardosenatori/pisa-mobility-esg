@@ -7,6 +7,7 @@ import AnalystView from './components/views/AnalystView';
 import OpenDataView from './components/views/OpenDataView';
 import Toast from './components/ui/Toast';
 import DataRequirementsModal from './components/ui/DataRequirementsModal';
+import OnboardingTour from './components/ui/OnboardingTour';
 import { fetchPisaAirQuality, fetchPisaWeather } from './services/liveDataService';
 
 export default function App() {
@@ -23,7 +24,27 @@ export default function App() {
     }
   });
 
-  // Sync mode changes to localStorage
+  // Onboarding Spotlight Tour State
+  const [isTourOpen, setIsTourOpen] = useState(false);
+  const [tourStepIndex, setTourStepIndex] = useState(0);
+
+  // Auto-start onboarding tour on first visit (after 1 second)
+  useEffect(() => {
+    try {
+      const tourSeen = localStorage.getItem('pm_esg_tour_seen');
+      if (!tourSeen) {
+        const timer = setTimeout(() => {
+          setIsTourOpen(true);
+          localStorage.setItem('pm_esg_tour_seen', 'true');
+        }, 1000);
+        return () => clearTimeout(timer);
+      }
+    } catch (e) {
+      console.warn('LocalStorage tour check error:', e);
+    }
+  }, []);
+
+  // Sync citizen mode changes to localStorage
   useEffect(() => {
     try {
       localStorage.setItem('pm_esg_guide', citizenGuide);
@@ -104,10 +125,15 @@ export default function App() {
     setIsModalOpen(true);
   };
 
+  const handleStartTour = () => {
+    setTourStepIndex(0);
+    setIsTourOpen(true);
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 font-sans selection:bg-emerald-500 selection:text-white">
       
-      {/* Institutional Navigation Header with Mode Switch */}
+      {/* Institutional Navigation Header with Mode Switch & Tour Trigger */}
       <Header 
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 
@@ -118,6 +144,7 @@ export default function App() {
         onOpenDataModal={() => setIsModalOpen(true)}
         citizenGuide={citizenGuide}
         setCitizenGuide={setCitizenGuide}
+        onStartTour={handleStartTour}
       />
 
       {/* Main Viewport Container */}
@@ -129,6 +156,7 @@ export default function App() {
             onInspectMetric={handleInspectMetric}
             liveAirQuality={liveAirQuality}
             citizenGuide={citizenGuide}
+            onStartTour={handleStartTour}
           />
         )}
 
@@ -161,6 +189,15 @@ export default function App() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         initialMetricId={inspectMetricId}
+      />
+
+      {/* Onboarding Spotlight Tour (5 Steps) */}
+      <OnboardingTour
+        isOpen={isTourOpen}
+        onClose={() => setIsTourOpen(false)}
+        currentStepIndex={tourStepIndex}
+        onStepChange={setTourStepIndex}
+        onSetActiveTab={setActiveTab}
       />
 
       {/* Institutional Toast Notifications */}

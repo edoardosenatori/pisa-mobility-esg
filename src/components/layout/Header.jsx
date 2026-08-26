@@ -14,7 +14,9 @@ import {
   Wind,
   Info,
   BookOpen,
-  Sliders
+  Sliders,
+  HelpCircle,
+  Play
 } from 'lucide-react';
 
 export default function Header({ 
@@ -26,7 +28,8 @@ export default function Header({
   liveAirQuality,
   onOpenDataModal,
   citizenGuide,
-  setCitizenGuide
+  setCitizenGuide,
+  onStartTour
 }) {
   const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -124,8 +127,18 @@ export default function Header({
               </div>
             </div>
 
-            {/* Mobile quick citizen guide badge */}
-            <div className="lg:hidden">
+            {/* Mobile quick action buttons */}
+            <div className="flex items-center gap-2 lg:hidden">
+              <button
+                type="button"
+                onClick={onStartTour}
+                className="p-2 rounded-xl bg-emerald-950/80 text-emerald-300 border border-emerald-500 flex items-center gap-1 text-xs font-semibold"
+                title="Tour Guidato"
+              >
+                <HelpCircle className="w-4 h-4 text-emerald-400" />
+                <span>Tour</span>
+              </button>
+
               <button
                 type="button"
                 onClick={() => setCitizenGuide(!citizenGuide)}
@@ -142,8 +155,8 @@ export default function Header({
             </div>
           </div>
 
-          {/* Center / Right: Mode Switch Toggle + Live Badges + Controls */}
-          <div className="flex items-center gap-2.5 flex-wrap justify-between lg:justify-end w-full lg:w-auto">
+          {/* Center / Right: Mode Switch Toggle + Tour Trigger + Live Badges */}
+          <div id="tour-header-controls" className="flex items-center gap-2.5 flex-wrap justify-between lg:justify-end w-full lg:w-auto">
             
             {/* 1. PROGRESSIVE DISCLOSURE SWITCH: Guida alla Lettura (Cittadini) */}
             <div className="hidden sm:flex items-center gap-2.5 bg-slate-950/90 px-3 py-1.5 rounded-xl border border-slate-800 shadow-inner">
@@ -178,9 +191,20 @@ export default function Header({
                   ? 'bg-emerald-950/80 text-emerald-300 border-emerald-700/60' 
                   : 'bg-slate-900 text-slate-400 border-slate-700'
               }`}>
-                {citizenGuide ? 'ON (Divulgativo)' : 'OFF (Tecnico)'}
+                {citizenGuide ? 'ON' : 'OFF'}
               </span>
             </div>
+
+            {/* 2. TRIGGER GUIDA RAPIDA / TOUR SPOTLIGHT */}
+            <button
+              type="button"
+              onClick={onStartTour}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white border border-emerald-400/40 shadow-sm transition cursor-pointer"
+              title="Riapri la guida rapida interattiva (Tour Guidato)"
+            >
+              <HelpCircle className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Guida Rapida</span>
+            </button>
 
             {/* Live Weather & Air Quality Badge for Pisa */}
             <div className="hidden xl:flex items-center gap-2 bg-slate-950/80 px-2.5 py-1.5 rounded-lg border border-slate-800 text-xs">
@@ -205,7 +229,7 @@ export default function Header({
             {/* Transparency Modal Trigger */}
             <button
               onClick={() => onOpenDataModal && onOpenDataModal()}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-purple-900/40 text-purple-300 border border-purple-700/50 hover:bg-purple-800/60 hover:text-white transition shadow-sm"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-purple-900/40 text-purple-300 border border-purple-700/50 hover:bg-purple-800/60 hover:text-white transition shadow-sm cursor-pointer"
               title="Guida trasparenza: vedi quali dati sono reali e i requisiti per quelli virtuali"
             >
               <Info className="w-3.5 h-3.5 text-purple-400" />
@@ -216,7 +240,7 @@ export default function Header({
             <button
               onClick={onRefresh}
               disabled={isRefreshing}
-              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-blue-900/40 text-blue-300 border border-blue-700/50 hover:bg-blue-800/60 hover:text-white transition shadow-sm ${
+              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-blue-900/40 text-blue-300 border border-blue-700/50 hover:bg-blue-800/60 hover:text-white transition shadow-sm cursor-pointer ${
                 isRefreshing ? 'opacity-70 cursor-wait' : ''
               }`}
               title="Aggiorna feed sensori IoT"
@@ -237,7 +261,7 @@ export default function Header({
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 whitespace-nowrap ${
+                className={`flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 whitespace-nowrap cursor-pointer ${
                   isActive
                     ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-900/50 border border-blue-400/30'
                     : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 border border-transparent'

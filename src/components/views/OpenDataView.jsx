@@ -179,7 +179,7 @@ export default function OpenDataView({ onShowToast, onInspectMetric, citizenGuid
   };
 
   return (
-    <div className="space-y-10 animate-in fade-in duration-300">
+    <div id="tour-opendata-section" className="space-y-10 animate-in fade-in duration-300">
       
       {/* 1. TOP SUMMARY CARDS (DIVULGATIVE AD ALTO IMPATTO CITTADINO) */}
       <div>

@@ -328,7 +328,7 @@ export default function MapView({ onTriggerCivicReport, onInspectMetric, citizen
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-300">
+    <div id="tour-map-section" className="space-y-6 animate-in fade-in duration-300">
       
       {/* Top Controls & KPI Ribbon */}
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 bg-slate-800/60 p-4 sm:p-5 rounded-2xl border border-slate-700/60 backdrop-blur-xl">

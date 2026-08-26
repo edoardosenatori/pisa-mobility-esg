@@ -75,7 +75,7 @@ export default function OnboardingTour({
   onStepChange, 
   onSetActiveTab 
 }) {
-  const [highlightStyle, setHighlightStyle] = useState(null);
+  const [highlightRect, setHighlightRect] = useState(null);
 
   const step = TOUR_STEPS[currentStepIndex] || TOUR_STEPS[0];
   const isFirstStep = currentStepIndex === 0;
@@ -90,7 +90,7 @@ export default function OnboardingTour({
     }
   }, [currentStepIndex, isOpen]);
 
-  // Position the highlight box over the target element
+  // Position the spotlight cutout over the target element
   useEffect(() => {
     if (!isOpen) return;
 
@@ -100,18 +100,18 @@ export default function OnboardingTour({
         const rect = targetEl.getBoundingClientRect();
         targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-        setHighlightStyle({
-          top: `${Math.max(10, rect.top - 8)}px`,
-          left: `${Math.max(10, rect.left - 8)}px`,
-          width: `${rect.width + 16}px`,
-          height: `${rect.height + 16}px`,
+        setHighlightRect({
+          top: Math.max(10, rect.top - 8),
+          left: Math.max(10, rect.left - 8),
+          width: rect.width + 16,
+          height: rect.height + 16,
         });
       } else {
-        setHighlightStyle(null);
+        setHighlightRect(null);
       }
     };
 
-    const timer = setTimeout(updateHighlight, 300);
+    const timer = setTimeout(updateHighlight, 350);
     window.addEventListener('resize', updateHighlight);
     window.addEventListener('scroll', updateHighlight);
 
@@ -144,123 +144,174 @@ export default function OnboardingTour({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[100000] flex items-end sm:items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-300">
+    <div className="fixed inset-0 z-[100000] pointer-events-none animate-in fade-in duration-200">
       
-      {/* Target Element Spotlight Ring (if target found) */}
-      {highlightStyle && (
+      {/* 1. CUTOUT SVG SPOTLIGHT MASK (ZERO BLUR, 100% CRISP SHARP TARGET) */}
+      <svg 
+        className="fixed inset-0 w-full h-full pointer-events-auto"
+        onClick={onClose}
+        style={{ zIndex: 100000 }}
+      >
+        <defs>
+          <mask id="tour-spotlight-mask">
+            {/* White everywhere (dimmed overlay) */}
+            <rect x="0" y="0" width="100%" height="100%" fill="white" />
+            
+            {/* Transparent Cutout Hole for target (black in mask = clear hole) */}
+            {highlightRect && (
+              <rect
+                x={highlightRect.left}
+                y={highlightRect.top}
+                width={highlightRect.width}
+                height={highlightRect.height}
+                rx="20"
+                ry="20"
+                fill="black"
+                className="transition-all duration-300 ease-out"
+              />
+            )}
+          </mask>
+        </defs>
+
+        {/* Semi-transparent dark background (NO BLUR, background remains clear and legible) */}
+        <rect
+          x="0"
+          y="0"
+          width="100%"
+          height="100%"
+          fill="rgba(5, 10, 25, 0.72)"
+          mask="url(#tour-spotlight-mask)"
+        />
+      </svg>
+
+      {/* 2. EMERALD GLOWING SPOTLIGHT BORDER OVER THE TARGET ELEMENT */}
+      {highlightRect && (
         <div
-          className="fixed pointer-events-none rounded-3xl border-2 border-emerald-400 ring-4 ring-emerald-400/30 shadow-[0_0_50px_rgba(16,185,129,0.45)] transition-all duration-500 ease-out z-[100001]"
-          style={highlightStyle}
+          className="fixed pointer-events-none rounded-2xl border-2 border-emerald-400 ring-4 ring-emerald-400/35 shadow-[0_0_40px_rgba(16,185,129,0.5)] transition-all duration-300 ease-out"
+          style={{
+            top: `${highlightRect.top}px`,
+            left: `${highlightRect.left}px`,
+            width: `${highlightRect.width}px`,
+            height: `${highlightRect.height}px`,
+            zIndex: 100001
+          }}
         />
       )}
 
-      {/* Floating Tour Guide Dialog Card */}
+      {/* 3. FLOATING TOUR DIALOG CARD (DOCKED BOTTOM/CENTER) */}
       <div 
-        role="dialog"
-        aria-modal="true"
-        className="relative z-[100002] w-full max-w-lg bg-slate-900/95 border border-emerald-500/50 rounded-3xl p-6 shadow-2xl shadow-black/90 backdrop-blur-2xl text-slate-100 animate-in zoom-in-95 duration-200"
+        className="fixed inset-x-0 bottom-6 sm:bottom-8 flex justify-center px-4 pointer-events-auto"
+        style={{ zIndex: 100002 }}
       >
-        {/* Top Header with Step Counter & Close */}
-        <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-          <div className="flex items-center gap-2">
-            <span className={`px-2.5 py-1 rounded-full text-xs font-bold border flex items-center gap-1.5 ${step.badgeColor}`}>
-              <StepIcon className="w-3.5 h-3.5" />
-              <span>{step.subtitle}</span>
-            </span>
-            <span className="text-xs font-semibold text-slate-400">
-              Step {currentStepIndex + 1} di {TOUR_STEPS.length}
-            </span>
-          </div>
-
-          <button
-            onClick={onClose}
-            className="text-slate-400 hover:text-white p-1.5 rounded-xl hover:bg-slate-800 transition cursor-pointer"
-            title="Chiudi tour (Esc)"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* Step Progress Bar */}
-        <div className="w-full bg-slate-800 h-1.5 rounded-full my-4 overflow-hidden">
-          <div 
-            className="bg-gradient-to-r from-emerald-500 to-blue-500 h-full rounded-full transition-all duration-300"
-            style={{ width: `${((currentStepIndex + 1) / TOUR_STEPS.length) * 100}%` }}
-          />
-        </div>
-
-        {/* Content */}
-        <div className="space-y-2.5 my-3">
-          <h3 className="text-xl font-extrabold text-white tracking-tight flex items-center gap-2">
-            <span>{step.title}</span>
-          </h3>
-          <p className="text-sm text-slate-300 leading-relaxed font-normal">
-            {step.description}
-          </p>
-        </div>
-
-        {/* Step Indicator Dots */}
-        <div className="flex items-center justify-center gap-1.5 py-2">
-          {TOUR_STEPS.map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => onStepChange(idx)}
-              className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                idx === currentStepIndex 
-                  ? 'w-6 bg-emerald-400' 
-                  : 'w-2 bg-slate-700 hover:bg-slate-500'
-              }`}
-              title={`Vai a step ${idx + 1}`}
-            />
-          ))}
-        </div>
-
-        {/* Action Controls */}
-        <div className="flex items-center justify-between gap-3 pt-3 border-t border-slate-800 mt-2">
-          <button
-            type="button"
-            onClick={onClose}
-            className="text-xs font-semibold text-slate-400 hover:text-slate-200 px-3 py-2 rounded-xl transition cursor-pointer"
-          >
-            Salta Tour
-          </button>
-
-          <div className="flex items-center gap-2">
-            {!isFirstStep && (
-              <button
-                type="button"
-                onClick={() => onStepChange(currentStepIndex - 1)}
-                className="flex items-center gap-1 px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition cursor-pointer"
-              >
-                <ArrowLeft className="w-3.5 h-3.5" /> Indietro
-              </button>
-            )}
+        <div 
+          role="dialog"
+          aria-modal="true"
+          onClick={(e) => e.stopPropagation()}
+          className="w-full max-w-xl bg-slate-900/98 border border-emerald-500/60 rounded-3xl p-5 sm:p-6 shadow-2xl shadow-black/95 backdrop-blur-2xl text-slate-100 animate-in slide-in-from-bottom-4 duration-200"
+        >
+          {/* Top Header with Step Counter & Close Button */}
+          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className={`px-2.5 py-1 rounded-full text-xs font-bold border flex items-center gap-1.5 ${step.badgeColor}`}>
+                <StepIcon className="w-3.5 h-3.5" />
+                <span>{step.subtitle}</span>
+              </span>
+              <span className="text-xs font-bold text-slate-400">
+                Step {currentStepIndex + 1} di {TOUR_STEPS.length}
+              </span>
+            </div>
 
             <button
-              type="button"
-              onClick={() => {
-                if (isLastStep) {
-                  onClose();
-                } else {
-                  onStepChange(currentStepIndex + 1);
-                }
-              }}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-500 hover:to-blue-500 text-white shadow-lg shadow-emerald-950/50 border border-emerald-400/40 transition cursor-pointer"
+              onClick={onClose}
+              className="text-slate-400 hover:text-white p-1 rounded-xl hover:bg-slate-800 transition cursor-pointer"
+              title="Chiudi tour (Esc)"
             >
-              {isLastStep ? (
-                <>
-                  <CheckCircle2 className="w-3.5 h-3.5" /> Esplora Dashboard
-                </>
-              ) : (
-                <>
-                  <span>Avanti</span> <ArrowRight className="w-3.5 h-3.5" />
-                </>
-              )}
+              <X className="w-4 h-4" />
             </button>
           </div>
-        </div>
 
+          {/* Step Progress Bar */}
+          <div className="w-full bg-slate-800 h-1.5 rounded-full my-3 overflow-hidden">
+            <div 
+              className="bg-gradient-to-r from-emerald-500 to-blue-500 h-full rounded-full transition-all duration-300"
+              style={{ width: `${((currentStepIndex + 1) / TOUR_STEPS.length) * 100}%` }}
+            />
+          </div>
+
+          {/* Text Content */}
+          <div className="space-y-1.5 my-2.5">
+            <h3 className="text-lg sm:text-xl font-extrabold text-white tracking-tight flex items-center gap-2">
+              <span>{step.title}</span>
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
+              {step.description}
+            </p>
+          </div>
+
+          {/* Step Indicator Dots */}
+          <div className="flex items-center justify-center gap-1.5 py-1.5">
+            {TOUR_STEPS.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => onStepChange(idx)}
+                className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                  idx === currentStepIndex 
+                    ? 'w-6 bg-emerald-400' 
+                    : 'w-2 bg-slate-700 hover:bg-slate-500'
+                }`}
+                title={`Vai a step ${idx + 1}`}
+              />
+            ))}
+          </div>
+
+          {/* Action Controls */}
+          <div className="flex items-center justify-between gap-3 pt-3 border-t border-slate-800 mt-1">
+            <button
+              type="button"
+              onClick={onClose}
+              className="text-xs font-semibold text-slate-400 hover:text-slate-200 px-2 py-1.5 rounded-xl transition cursor-pointer"
+            >
+              Salta Tour
+            </button>
+
+            <div className="flex items-center gap-2">
+              {!isFirstStep && (
+                <button
+                  type="button"
+                  onClick={() => onStepChange(currentStepIndex - 1)}
+                  className="flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition cursor-pointer"
+                >
+                  <ArrowLeft className="w-3.5 h-3.5" /> Indietro
+                </button>
+              )}
+
+              <button
+                type="button"
+                onClick={() => {
+                  if (isLastStep) {
+                    onClose();
+                  } else {
+                    onStepChange(currentStepIndex + 1);
+                  }
+                }}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-500 hover:to-blue-500 text-white shadow-lg shadow-emerald-950/50 border border-emerald-400/40 transition cursor-pointer"
+              >
+                {isLastStep ? (
+                  <>
+                    <CheckCircle2 className="w-3.5 h-3.5" /> Esplora Dashboard
+                  </>
+                ) : (
+                  <>
+                    <span>Avanti</span> <ArrowRight className="w-3.5 h-3.5" />
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+
+        </div>
       </div>
+
     </div>
   );
 }

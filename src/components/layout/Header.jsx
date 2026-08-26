@@ -16,7 +16,8 @@ import {
   BookOpen,
   Sliders,
   HelpCircle,
-  Play
+  Play,
+  CheckCircle2
 } from 'lucide-react';
 
 export default function Header({ 
@@ -217,6 +218,19 @@ export default function Header({
                 <Wind className="w-3.5 h-3.5 text-emerald-400" />
                 <span>PM10: <strong>{liveAirQuality?.pm10 ?? '18.2'} µg/m³</strong></span>
               </div>
+            </div>
+
+            {/* Test Badge: Branch Collaborator Test */}
+            <div
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold bg-emerald-950/80 text-emerald-300 border border-emerald-500/50 shadow-sm"
+              title="Verifica ambiente di collaborazione sul branch"
+            >
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+              <span className="hidden sm:inline">Branch Test OK • Collab Live</span>
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
             </div>
 
             {/* Live Date/Time */}

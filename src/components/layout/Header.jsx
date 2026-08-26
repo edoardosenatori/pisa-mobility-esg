@@ -207,19 +207,6 @@ export default function Header({
               <span className="hidden sm:inline">Guida Rapida</span>
             </button>
 
-            {/* Branch collaborator test badge */}
-            <span
-              data-testid="collaborator-badge"
-              className="inline-flex min-h-11 items-center gap-2 rounded-full bg-emerald-950/80 px-3 py-1.5 text-xs font-medium text-emerald-200 border border-emerald-500/50 whitespace-nowrap"
-            >
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" />
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-              </span>
-              <span>Branch Test OK • Collab Live</span>
-            </span>
-
             {/* Live Weather & Air Quality Badge for Pisa */}
             <div className="hidden xl:flex items-center gap-2 bg-slate-950/80 px-2.5 py-1.5 rounded-lg border border-slate-800 text-xs">
               <div className="flex items-center gap-1 text-amber-300">
@@ -233,18 +220,18 @@ export default function Header({
               </div>
             </div>
 
-            {/* Test Badge: Branch Collaborator Test */}
-            <div
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold bg-emerald-950/80 text-emerald-300 border border-emerald-500/50 shadow-sm"
-              title="Verifica ambiente di collaborazione sul branch"
+            {/* Branch collaborator test badge — feature/collab-test-preview */}
+            <span
+              data-testid="collaborator-badge"
+              className="inline-flex min-h-11 items-center gap-2 rounded-full bg-emerald-950/80 px-3 py-1.5 text-xs font-medium text-emerald-200 border border-emerald-500/50 whitespace-nowrap"
             >
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="hidden sm:inline">Branch Test OK • Collab Live</span>
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" />
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
               </span>
-            </div>
+              <span>Branch Test OK • Collab Live</span>
+            </span>
 
             {/* Live Date/Time */}
             <div className="flex items-center gap-2 bg-slate-800/80 px-2.5 py-1.5 rounded-lg border border-slate-700/60 text-xs">

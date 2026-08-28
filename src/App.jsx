@@ -8,6 +8,7 @@ import OpenDataView from './components/views/OpenDataView';
 import Toast from './components/ui/Toast';
 import DataRequirementsModal from './components/ui/DataRequirementsModal';
 import OnboardingTour from './components/ui/OnboardingTour';
+import ExecutiveReportModal from './components/ui/ExecutiveReportModal';
 import { fetchPisaAirQuality, fetchPisaWeather } from './services/liveDataService';
 
 export default function App() {
@@ -27,6 +28,9 @@ export default function App() {
   // Onboarding Spotlight Tour State
   const [isTourOpen, setIsTourOpen] = useState(false);
   const [tourStepIndex, setTourStepIndex] = useState(0);
+
+  // Executive Report A4 Modal State
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
   // Auto-start onboarding tour on first visit (after 1 second)
   useEffect(() => {
@@ -155,8 +159,10 @@ export default function App() {
             onNavigateToAnalyst={() => setActiveTab('analyst')}
             onInspectMetric={handleInspectMetric}
             liveAirQuality={liveAirQuality}
+            liveWeather={liveWeather}
             citizenGuide={citizenGuide}
             onStartTour={handleStartTour}
+            onOpenReportModal={() => setIsReportModalOpen(true)}
           />
         )}
 
@@ -189,6 +195,14 @@ export default function App() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         initialMetricId={inspectMetricId}
+      />
+
+      {/* Executive Report A4 Print Modal */}
+      <ExecutiveReportModal
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+        liveAirQuality={liveAirQuality}
+        liveWeather={liveWeather}
       />
 
       {/* Onboarding Spotlight Tour (5 Steps) */}

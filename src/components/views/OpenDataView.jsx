@@ -11,6 +11,7 @@ import {
 import { exportToCSV, exportToJSON } from '../../utils/exportUtils';
 import DataSourceBadge from '../ui/DataSourceBadge';
 import InfoTooltip from '../ui/InfoTooltip';
+import EcoCalculatorWidget from '../ui/EcoCalculatorWidget';
 import { 
   TreePine, 
   Zap, 
@@ -279,7 +280,10 @@ export default function OpenDataView({ onShowToast, onInspectMetric, citizenGuid
         </div>
       </div>
 
-      {/* 2. CITIZEN ENGAGEMENT IMPACT COUNTERS */}
+      {/* 2. CALCOLATORE RISPARMIO PERSONALE CITTADINI */}
+      <EcoCalculatorWidget citizenGuide={citizenGuide} />
+
+      {/* 3. CITIZEN ENGAGEMENT IMPACT COUNTERS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
         <div className="bg-slate-800/60 p-4 rounded-xl border border-slate-700/60 backdrop-blur-xl">

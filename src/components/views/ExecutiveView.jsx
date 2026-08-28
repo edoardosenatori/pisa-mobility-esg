@@ -19,6 +19,7 @@ import EsgCard from '../ui/EsgCard';
 import ProgressBar from '../ui/ProgressBar';
 import DataSourceBadge from '../ui/DataSourceBadge';
 import InfoTooltip from '../ui/InfoTooltip';
+import PredictiveTrafficBanner from '../ui/PredictiveTrafficBanner';
 import { 
   TrendingUp, 
   Award, 
@@ -40,7 +41,9 @@ import {
   TreePine,
   Accessibility,
   Flame,
-  Activity
+  Activity,
+  FileText,
+  Printer
 } from 'lucide-react';
 
 export default function ExecutiveView({ 
@@ -48,8 +51,10 @@ export default function ExecutiveView({
   onNavigateToAnalyst, 
   onInspectMetric, 
   liveAirQuality,
+  liveWeather,
   citizenGuide = false,
-  onStartTour
+  onStartTour,
+  onOpenReportModal
 }) {
   const [selectedDimension, setSelectedDimension] = useState('environmental');
   const [chartMetric, setChartMetric] = useState('co2');
@@ -94,7 +99,7 @@ export default function ExecutiveView({
               <button
                 type="button"
                 onClick={() => onStartTour && onStartTour()}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-xl shadow-emerald-950/60 border border-emerald-400/40 transition transform hover:-translate-y-0.5 cursor-pointer"
+                className="flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-xl shadow-emerald-950/60 border border-emerald-400/40 transition transform hover:-translate-y-0.5 cursor-pointer"
               >
                 <Play className="w-4 h-4 fill-white" />
                 <span>Avvia Tour Guidato (1 min)</span>
@@ -102,8 +107,17 @@ export default function ExecutiveView({
 
               <button
                 type="button"
+                onClick={() => onOpenReportModal && onOpenReportModal()}
+                className="flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-xl shadow-blue-950/60 border border-blue-400/40 transition transform hover:-translate-y-0.5 cursor-pointer"
+              >
+                <FileText className="w-4 h-4" />
+                <span>Report PDF A4 Giunta</span>
+              </button>
+
+              <button
+                type="button"
                 onClick={onNavigateToMap}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-slate-800/90 hover:bg-slate-700/90 text-slate-200 hover:text-white border border-slate-600/70 transition transform hover:-translate-y-0.5 cursor-pointer"
+                className="flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-slate-800/90 hover:bg-slate-700/90 text-slate-200 hover:text-white border border-slate-600/70 transition transform hover:-translate-y-0.5 cursor-pointer"
               >
                 <MapPin className="w-4 h-4 text-blue-400" />
                 <span>Esplora Mappa Asse Pilota</span>
@@ -177,6 +191,12 @@ export default function ExecutiveView({
         </div>
       </div>
 
+      {/* 2. PREDICTIVE TRAFFIC & WEATHER SIMULATOR BANNER */}
+      <PredictiveTrafficBanner 
+        liveWeather={liveWeather} 
+        citizenGuide={citizenGuide} 
+      />
+
       {/* SECTION 1: 4 ESG CARDS (WITH CITIZEN SUBTITLES AND TOOLTIPS) */}
       <div id="tour-esg-cards">
         <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
@@ -241,7 +261,7 @@ export default function ExecutiveView({
             <div className="flex items-center bg-slate-900/80 p-1 rounded-lg border border-slate-700/60 text-xs">
               <button
                 onClick={() => setChartMetric('co2')}
-                className={`px-3 py-1 rounded-md font-medium transition ${
+                className={`px-3 py-1 rounded-md font-medium transition cursor-pointer ${
                   chartMetric === 'co2'
                     ? 'bg-emerald-600 text-white shadow-sm'
                     : 'text-slate-400 hover:text-white'
@@ -251,7 +271,7 @@ export default function ExecutiveView({
               </button>
               <button
                 onClick={() => setChartMetric('modal')}
-                className={`px-3 py-1 rounded-md font-medium transition flex items-center gap-1 ${
+                className={`px-3 py-1 rounded-md font-medium transition flex items-center gap-1 cursor-pointer ${
                   chartMetric === 'modal'
                     ? 'bg-blue-600 text-white shadow-sm'
                     : 'text-slate-400 hover:text-white'

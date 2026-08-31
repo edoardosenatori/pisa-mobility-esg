@@ -220,19 +220,6 @@ export default function Header({
               </div>
             </div>
 
-            {/* Branch collaborator test badge — feature/collab-test-preview */}
-            <span
-              data-testid="collaborator-badge"
-              className="inline-flex min-h-11 items-center gap-2 rounded-full bg-emerald-950/80 px-3 py-1.5 text-xs font-medium text-emerald-200 border border-emerald-500/50 whitespace-nowrap"
-            >
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" />
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-              </span>
-              <span>Branch Test OK • Collab Live</span>
-            </span>
-
             {/* Live Date/Time */}
             <div className="flex items-center gap-2 bg-slate-800/80 px-2.5 py-1.5 rounded-lg border border-slate-700/60 text-xs">
               <Calendar className="w-3.5 h-3.5 text-blue-400" />

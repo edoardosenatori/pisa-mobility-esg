@@ -61,7 +61,7 @@ export default function EcoCalculatorWidget({ citizenGuide = false }) {
   }, [selectedRoute, daysPerWeek, transportMode]);
 
   return (
-    <div className="bg-gradient-to-br from-slate-900/95 via-slate-800/90 to-emerald-950/40 p-6 sm:p-7 rounded-3xl border border-emerald-500/40 shadow-2xl backdrop-blur-2xl space-y-6">
+    <div id="tour-eco-calculator" className="bg-gradient-to-br from-slate-900/95 via-slate-800/90 to-emerald-950/40 p-6 sm:p-7 rounded-3xl border border-emerald-500/40 shadow-2xl backdrop-blur-2xl space-y-6">
       
       {/* Widget Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-700/60">
@@ -73,6 +73,7 @@ export default function EcoCalculatorWidget({ citizenGuide = false }) {
             <DataSourceBadge
               status="REAL_CALCULATED"
               customLabel="Parametri ISPRA & ACI 2026"
+              onClick={() => window.open('https://fetransp.isprambiente.it/', '_blank')}
             />
             <InfoTooltip term="CO2 Evitata" showCitizenBadge={citizenGuide} />
           </div>

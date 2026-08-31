@@ -34,7 +34,7 @@ export default function PredictiveTrafficBanner({ liveWeather, citizenGuide = fa
   };
 
   return (
-    <div className="bg-gradient-to-r from-slate-900/95 via-slate-800/90 to-purple-950/40 p-5 sm:p-6 rounded-3xl border border-purple-500/40 shadow-2xl backdrop-blur-2xl space-y-4">
+    <div id="tour-predictive-traffic" className="bg-gradient-to-r from-slate-900/95 via-slate-800/90 to-purple-950/40 p-5 sm:p-6 rounded-3xl border border-purple-500/40 shadow-2xl backdrop-blur-2xl space-y-4">
       
       {/* Header with Title & Scenario Switcher */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-3 border-b border-slate-700/60">
@@ -46,6 +46,7 @@ export default function PredictiveTrafficBanner({ liveWeather, citizenGuide = fa
             <DataSourceBadge
               status="REAL_CALCULATED"
               customLabel="Modello O/D PUMS & Open-Meteo"
+              onClick={() => window.open('https://pumspisa.tages.it/', '_blank')}
             />
             <InfoTooltip term="Modal Split" showCitizenBadge={citizenGuide} />
           </div>

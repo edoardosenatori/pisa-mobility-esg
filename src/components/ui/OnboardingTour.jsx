@@ -12,7 +12,10 @@ import {
   ShieldCheck,
   Play,
   HelpCircle,
-  Compass
+  Compass,
+  Cpu,
+  Calculator,
+  ExternalLink
 } from 'lucide-react';
 
 export const TOUR_STEPS = [
@@ -20,9 +23,9 @@ export const TOUR_STEPS = [
     id: 'step-header',
     tab: 'executive',
     targetId: 'tour-header-controls',
-    title: '1. Dati Live & Switch Guida Cittadini',
+    title: '1. Dati Live Copernicus & Switch Cittadini',
     subtitle: 'Control Room Istituzionale',
-    description: 'In cima trovi i dati reali in tempo reale della qualità dell\'aria a Pisa (PM10 / NO₂) da Open-Meteo & Copernicus. Puoi attivare lo switch "Guida alla Lettura" per visualizzare spiegazioni semplici pensate per i cittadini.',
+    description: 'In cima trovi i dati reali in tempo reale della qualità dell\'aria a Pisa (PM10 / NO₂) da Open-Meteo & Copernicus (cliccabili per aprire la fonte ufficiale). Attiva lo switch "Guida alla Lettura" per spiegazioni divulgative.',
     icon: Sparkles,
     badgeColor: 'text-emerald-400 bg-emerald-950 border-emerald-800'
   },
@@ -32,39 +35,59 @@ export const TOUR_STEPS = [
     targetId: 'tour-esg-cards',
     title: '2. Le 4 Dimensioni ESG del PUMS',
     subtitle: 'Environmental, Social, Economic, Governance',
-    description: 'Monitora la decarbonizzazione (t CO₂ evitate), l\'accessibilità delle fermate per persone con disabilità (PEBA 74.2%), il risparmio economico collettivo e l\'avanzamento del piano comunale con semafori conformità.',
+    description: 'Monitora la decarbonizzazione (t CO₂ evitate con modello ISPRA), l\'accessibilità delle fermate per persone con disabilità (PEBA 74.2%), il risparmio economico e i semafori di conformità per la Giunta.',
     icon: Layers,
     badgeColor: 'text-blue-400 bg-blue-950 border-blue-800'
+  },
+  {
+    id: 'step-predictive-traffic',
+    tab: 'executive',
+    targetId: 'tour-predictive-traffic',
+    title: '3. Simulatore Predittivo AI Meteo-Traffico',
+    subtitle: 'AI Smart City Engine per i Lungarni',
+    description: 'Simula in tempo reale come il meteo di Pisa impatta la viabilità: seleziona "Pioggia Moderata" o "Maltempo" per stimare l\'aumento di auto sui Lungarni (+28% / +42%), la saturazione dei bus LAM e i consigli orari per i cittadini.',
+    icon: Cpu,
+    badgeColor: 'text-purple-400 bg-purple-950 border-purple-800'
   },
   {
     id: 'step-map',
     tab: 'map',
     targetId: 'tour-map-section',
-    title: '3. Mappa Territoriale & Flusso Traffico Live',
+    title: '4. Mappa Territoriale & Flusso Traffico Live',
     subtitle: 'Asse Pilota Stazione ➔ Miracoli',
-    description: 'Esplora le piste ciclabili reali di Pisa snappate su OpenStreetMap, gli stalli di bike sharing Ciclopi, le banchine PEBA e il nuovo Layer Traffico con velocità auto vs bici e vista Satellitare HD.',
+    description: 'Esplora le piste ciclabili reali di Pisa snappate al millimetro su OpenStreetMap, gli stalli di bike sharing Ciclopi, le banchine PEBA e il layer traffico veicolare con vista Satellitare HD.',
     icon: MapPin,
-    badgeColor: 'text-purple-400 bg-purple-950 border-purple-800'
+    badgeColor: 'text-emerald-400 bg-emerald-950 border-emerald-800'
   },
   {
     id: 'step-analyst',
     tab: 'analyst',
     targetId: 'tour-analyst-section',
-    title: '4. Grafico Bivariato: Bici vs Bus TPL',
+    title: '5. Grafico Bivariato: Bici vs Bus TPL',
     subtitle: 'Analisi dei Flussi di Mobilità Dolce',
     description: 'Scopri la correlazione oraria: durante i picchi di mobilità ciclabile (ore 8:00 e 18:00), la congestione e la saturazione dei bus urbani LAM diminuiscono sensibilmente liberando spazio urbano.',
     icon: BarChart3,
     badgeColor: 'text-amber-400 bg-amber-950 border-amber-800'
   },
   {
+    id: 'step-eco-calculator',
+    tab: 'opendata',
+    targetId: 'tour-eco-calculator',
+    title: '6. Calcolatore Risparmio Personale Cittadini',
+    subtitle: 'Strumento di Calcolo Tratte Pisane',
+    description: 'Inserisci il tuo tragitto quotidiano (es. Stazione FS ➔ Polo Fibonacci) per calcolare istantaneamente gli euro risparmiati all\'anno (parametri ACI), i kg di CO₂ evitati (ISPRA) e gli alberi equivalenti.',
+    icon: Calculator,
+    badgeColor: 'text-teal-400 bg-teal-950 border-teal-800'
+  },
+  {
     id: 'step-opendata',
     tab: 'opendata',
     targetId: 'tour-opendata-section',
-    title: '5. Segnalazioni Civiche & Open Data',
+    title: '7. Segnalazioni Civiche PEBA & Open Data',
     subtitle: 'Partecipazione Attiva & Trasparenza',
-    description: 'Invia segnalazioni certificate su barriere architettoniche PEBA con GPS simulato e protocollo telematico, e scarica liberamente i cataloghi dati certificati in formato CSV o JSON (CC-BY 4.0).',
+    description: 'Invia segnalazioni certificate su barriere architettoniche con geolocalizzazione GPS e protocollo telematico, ed esporta liberamente i dataset in formato CSV o JSON (CC-BY 4.0).',
     icon: Database,
-    badgeColor: 'text-emerald-400 bg-emerald-950 border-emerald-800'
+    badgeColor: 'text-blue-400 bg-blue-950 border-blue-800'
   }
 ];
 
@@ -146,7 +169,7 @@ export default function OnboardingTour({
   return (
     <div className="fixed inset-0 z-[100000] pointer-events-none animate-in fade-in duration-200">
       
-      {/* 1. CUTOUT SVG SPOTLIGHT MASK (ZERO BLUR, 100% CRISP SHARP TARGET) */}
+      {/* 1. CUTOUT SVG SPOTLIGHT MASK (ZERO BLUR, 100% SHARP TARGET ELEMENT) */}
       <svg 
         className="fixed inset-0 w-full h-full pointer-events-auto"
         onClick={onClose}

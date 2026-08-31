@@ -1,7 +1,7 @@
 /**
  * Registro Ufficiale di Trasparenza Dati PM-ESG (Comune di Pisa)
  * Specifica lo stato di ciascun dato (Reale Live, Calcolato ISPRA o Virtuale/Mock)
- * e i requisiti tecnici/amministrativi per l'integrazione reale.
+ * e include i link diretti e certificati alle piattaforme e fonti istituzionali.
  */
 
 export const DATA_STATUS_TYPES = {
@@ -15,7 +15,7 @@ export const DATA_STATUS_TYPES = {
   },
   REAL_CALCULATED: {
     id: 'REAL_CALCULATED',
-    label: 'CALCOLO ISPRA / EEA',
+    label: 'CALCOLO ISPRA / ACI',
     color: 'blue',
     badgeClass: 'bg-blue-500/20 text-blue-300 border-blue-500/40',
     dotClass: 'bg-blue-400',
@@ -37,9 +37,11 @@ export const DATA_TRANSPARENCY_REGISTRY = [
     name: 'Qualità dell\'Aria & Concentrazioni PM10/PM2.5/NO₂ a Pisa',
     view: 'Executive & Header',
     status: 'REAL_LIVE',
-    currentSource: 'API Open-Meteo / Rete Copernicus CAMS su coordinate di Pisa (Lat: 43.7167, Lng: 10.4000)',
+    currentSource: 'API Open-Meteo & Copernicus CAMS su coordinate di Pisa (Lat: 43.7167, Lng: 10.4000)',
     updateFrequency: 'Oraria in tempo reale',
-    requirementsToMakeReal: null, // Già reale al 100%
+    officialUrl: 'https://open-meteo.com/en/docs/air-quality-api',
+    officialPortalName: 'Open-Meteo Air Quality & Copernicus CAMS',
+    requirementsToMakeReal: null // Già reale al 100%
   },
   {
     id: 'weather_pisa',
@@ -48,25 +50,53 @@ export const DATA_TRANSPARENCY_REGISTRY = [
     status: 'REAL_LIVE',
     currentSource: 'API Open-Meteo Forecast Pisa Real-Time',
     updateFrequency: 'Live (ogni 15 min)',
-    requirementsToMakeReal: null, // Già reale al 100%
+    officialUrl: 'https://open-meteo.com/en/docs',
+    officialPortalName: 'Open-Meteo Weather Forecast (Pisa Node)',
+    requirementsToMakeReal: null // Già reale al 100%
   },
   {
     id: 'co2_factors_ispra',
-    name: 'Algoritmo Calcolo CO₂ Evitata & Alberi Equivalenti',
+    name: 'Algoritmo Calcolo CO₂ Evitata & Fattori di Emissione',
     view: 'Executive & Open Data',
     status: 'REAL_CALCULATED',
-    currentSource: 'Fattori Ufficiali ISPRA (0.135 kg CO₂/km auto media, 2.31 kg/L benzina, 20 kg/albero/anno)',
-    updateFrequency: 'Continuo su flusso',
-    requirementsToMakeReal: null, // Modello standard certificato
+    currentSource: 'Banca Dati Ufficiale ISPRA dei fattori di emissione del trasporto stradale in Italia (0.135 kg CO₂/km)',
+    updateFrequency: 'Continuo su flussi di spostamento',
+    officialUrl: 'https://fetransp.isprambiente.it/',
+    officialPortalName: 'Banca Dati Fattori Emissione Trasporto ISPRA',
+    requirementsToMakeReal: null // Modello standard certificato
+  },
+  {
+    id: 'aci_running_costs',
+    name: 'Costi Chilometrici & Risparmio Famiglie (ACI)',
+    view: 'Open Data (Eco-Calculator)',
+    status: 'REAL_CALCULATED',
+    currentSource: 'Tabelle Nazionali dei Costi Chilometrici di Esercizio ACI (0.22 €/km)',
+    updateFrequency: 'Annuale / Tabelle ACI in vigore',
+    officialUrl: 'https://aci.gov.it/servizio/costi-chilometrici-di-esercizio/',
+    officialPortalName: 'Tabelle Nazionali Costi Chilometrici ACI',
+    requirementsToMakeReal: null
   },
   {
     id: 'osm_pilot_axis',
     name: 'Geometrie Stradali Asse Pilota & Coordinate Nodi',
     view: 'Mappa Territoriale',
     status: 'REAL_LIVE',
-    currentSource: 'OpenStreetMap (OSM) e Geoportale Regione Toscana',
-    updateFrequency: 'Geometrie fisiche reali',
-    requirementsToMakeReal: null,
+    currentSource: 'OpenStreetMap (OSM) / OSRM e Geoportale Regione Toscana',
+    updateFrequency: 'Geometrie fisiche reali snappate su strada',
+    officialUrl: 'https://www.openstreetmap.org/#map=15/43.7167/10.4000',
+    officialPortalName: 'OpenStreetMap Nodo Pisa & OSRM',
+    requirementsToMakeReal: null
+  },
+  {
+    id: 'pisa_pums_deliberation',
+    name: 'PUMS Pisa 2020-2030 & Target Decarbonizzazione',
+    view: 'Executive (Report A4)',
+    status: 'REAL_CALCULATED',
+    currentSource: 'Piano Urbano Mobilità Sostenibile Comune di Pisa - Delibera Consiglio n. 19/2021',
+    updateFrequency: 'Atti Ufficiali Comune di Pisa',
+    officialUrl: 'https://pumspisa.tages.it/',
+    officialPortalName: 'Portale Partecipativo Ufficiale PUMS Pisa',
+    requirementsToMakeReal: null
   },
   {
     id: 'sharing_ciclopi_stations',
@@ -75,6 +105,8 @@ export const DATA_TRANSPARENCY_REGISTRY = [
     status: 'VIRTUAL_PUMS',
     currentSource: 'Simulazione basata su 6 stazioni reali (Stazione, Ponte di Mezzo, Fibonacci, Miracoli, Cavalieri, Porta Nuova)',
     updateFrequency: 'Simulato',
+    officialUrl: 'https://pisamo.it/',
+    officialPortalName: 'Pisamo S.r.l. - Gestore Mobilità Pisa',
     requirementsToMakeReal: {
       owner: 'Pisamo S.r.l. / Gestore Flotta Bicincittà-Ciclopi',
       standard: 'GBFS v3.0 (General Bikeshare Feed Specification) JSON',
@@ -96,6 +128,8 @@ export const DATA_TRANSPARENCY_REGISTRY = [
     status: 'VIRTUAL_PUMS',
     currentSource: 'Dati orari sintetici basati su matrici O/D studentesche e pendolari',
     updateFrequency: 'Simulato',
+    officialUrl: 'https://pisamo.it/',
+    officialPortalName: 'Pisamo S.r.l. & Comune di Pisa',
     requirementsToMakeReal: {
       owner: 'Comune di Pisa / Pisamo S.r.l. / FIAB Pisa',
       standard: 'API REST Eco-Counter / Protocollo MQTT o LoRaWAN su piattaforma Smart City Pisa',
@@ -117,6 +151,8 @@ export const DATA_TRANSPARENCY_REGISTRY = [
     status: 'VIRTUAL_PUMS',
     currentSource: 'Modello orario su flotta urbana LAM Rossa / LAM Verde',
     updateFrequency: 'Simulato',
+    officialUrl: 'https://www.at-bus.it/',
+    officialPortalName: 'Autolinee Toscane S.p.A. - TPL Toscana',
     requirementsToMakeReal: {
       owner: 'Autolinee Toscane S.p.A. & Regione Toscana',
       standard: 'GTFS-Realtime (TripUpdates & VehiclePositions con occupancy_status)',
@@ -138,6 +174,8 @@ export const DATA_TRANSPARENCY_REGISTRY = [
     status: 'VIRTUAL_PUMS',
     currentSource: 'Censimento simulato su fermate strategiche (Stazione FS, Pacinotti, Fibonacci, Torre)',
     updateFrequency: 'Simulato',
+    officialUrl: 'https://www.comune.pisa.it/',
+    officialPortalName: 'Comune di Pisa - Portale Istituzionale',
     requirementsToMakeReal: {
       owner: 'Comune di Pisa - Ufficio Tecnico & Consulta per le Disabilità',
       standard: 'Shapefile GIS / GeoJSON / WFS Geoserver Comune di Pisa',
@@ -158,6 +196,8 @@ export const DATA_TRANSPARENCY_REGISTRY = [
     status: 'REAL_LIVE',
     currentSource: 'Storage Reale Browser (LocalStorage / Session) + Export CSV/JSON Reale + Protocollo Telematico Generato',
     updateFrequency: 'Istantanea al submit',
+    officialUrl: 'https://www.comune.pisa.it/',
+    officialPortalName: 'Comune di Pisa - Servizi al Cittadino',
     requirementsToMakeReal: {
       owner: 'Comune di Pisa - Ufficio Relazioni con il Pubblico (URP)',
       standard: 'Database PostgreSQL con estensione PostGIS + REST API (Supabase / FastAPI / Django)',

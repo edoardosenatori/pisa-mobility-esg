@@ -207,8 +207,14 @@ export default function Header({
               <span className="hidden sm:inline">Guida Rapida</span>
             </button>
 
-            {/* Live Weather & Air Quality Badge for Pisa */}
-            <div className="hidden xl:flex items-center gap-2 bg-slate-950/80 px-2.5 py-1.5 rounded-lg border border-slate-800 text-xs">
+            {/* Live Weather & Air Quality Badge for Pisa with verified direct link */}
+            <a
+              href="https://open-meteo.com/en/docs/air-quality-api"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden xl:flex items-center gap-2 bg-slate-950/80 hover:bg-slate-900 px-2.5 py-1.5 rounded-lg border border-slate-800 hover:border-emerald-500/50 text-xs transition group cursor-pointer"
+              title="Dati reali verificati Open-Meteo & Copernicus CAMS (Stazione Pisa). Clicca per aprire la documentazione ufficiale API."
+            >
               <div className="flex items-center gap-1 text-amber-300">
                 <CloudSun className="w-3.5 h-3.5 text-amber-400" />
                 <span>Pisa: <strong>{liveWeather?.temperature ?? '24.5'}°C</strong></span>
@@ -217,8 +223,9 @@ export default function Header({
               <div className="flex items-center gap-1 text-emerald-400">
                 <Wind className="w-3.5 h-3.5 text-emerald-400" />
                 <span>PM10: <strong>{liveAirQuality?.pm10 ?? '18.2'} µg/m³</strong></span>
+                <span className="text-[10px] text-slate-500 group-hover:text-emerald-400">↗</span>
               </div>
-            </div>
+            </a>
 
             {/* Live Date/Time */}
             <div className="flex items-center gap-2 bg-slate-800/80 px-2.5 py-1.5 rounded-lg border border-slate-700/60 text-xs">

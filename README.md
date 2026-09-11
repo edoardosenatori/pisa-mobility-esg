@@ -1,7 +1,10 @@
 # Pisa Mobility & ESG Data Dashboard (PM-ESG) 🚲🌱🏛️
 
 > **Cruscotto istituzionale per il monitoraggio e la trasparenza degli impatti della mobilità sostenibile - Comune di Pisa**
-> Conforme al Piano Urbano della Mobilità Sostenibile (PUMS 2020-2030) e alle linee guida di accessibilità **WCAG 2.1 Livello AA**.
+> Conforme al Piano Urbano della Mobilità Sostenibile (PUMS 2020-2030) e alle linee guida di sostenibilità ISO 37122 / GRI.
+> 
+> 📖 **Per il contesto completo del progetto, Mission, Vision, Storico evolutivo e Tasklist di miglioramento, consulta il file di riferimento:**  
+> 👉 **[`PRD.md`](./PRD.md)** *(Master Project Context & Roadmap)*
 
 ---
 

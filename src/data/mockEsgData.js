@@ -622,7 +622,7 @@ export const INITIAL_CIVIC_REPORTS = [
     descrizione: 'Dislivello tra banchina e pedana bus troppo elevato per sedia a rotelle; manca rampa di raccordo.',
     stato: 'In Lavorazione',
     priorita: 'Alta',
-    protocollo: 'PROT-MOB-2026/892'
+    protocollo: 'DEMO-PEBA-2026/892'
   },
   {
     id: 'SEG-PSA-2026-0839',
@@ -633,7 +633,7 @@ export const INITIAL_CIVIC_REPORTS = [
     descrizione: 'Stallo Ciclopi costantemente vuoto nelle ore di inizio lezioni. Necessario aumento rastrelliere.',
     stato: 'Verificato',
     priorita: 'Media',
-    protocollo: 'PROT-MOB-2026/884'
+    protocollo: 'DEMO-PEBA-2026/884'
   },
   {
     id: 'SEG-PSA-2026-0835',
@@ -644,7 +644,7 @@ export const INITIAL_CIVIC_REPORTS = [
     descrizione: 'Avvallamento pericoloso con ciottoli sconnessi dopo pioggia intensa.',
     stato: 'Programmato Intervento',
     priorita: 'Alta',
-    protocollo: 'PROT-MOB-2026/871'
+    protocollo: 'DEMO-PEBA-2026/871'
   },
   {
     id: 'SEG-PSA-2026-0828',
@@ -655,6 +655,6 @@ export const INITIAL_CIVIC_REPORTS = [
     descrizione: 'Furgone per scarico merci parcheggiato sulla corsia riservata ai non vedenti LOGES.',
     stato: 'Risolto',
     priorita: 'Risolta',
-    protocollo: 'PROT-MOB-2026/850'
+    protocollo: 'DEMO-PEBA-2026/850'
   }
 ];

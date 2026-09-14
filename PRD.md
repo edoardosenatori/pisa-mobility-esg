@@ -82,11 +82,11 @@ Dall'audit tecnico condotto sui file di revisione (`cose_da_sistemare_pm_esg (2)
 ## 5. 🛠️ TASCHE DI MIGLIORAMENTO PRIORITARIE (ROADMAP OPERATIVA)
 
 ### 🔴 SPRINT A — Priorità P0 (Bloccanti per la Credibilità Istituzionale)
-- [ ] **A.1 Tour Onboarding Default Chiuso**: Modificare `App.jsx` e `OnboardingTour.jsx` affinché il tour non parta automaticamente. Si apre solo al clic su "Guida Rapida" o "Avvia Tour". Supporto tasto Esc e click sull'overlay per chiusura immediata.
-- [ ] **A.2 Correzione Mapping Aria Live (PM10 / PM2.5 / NO₂)**: In `liveAirQualityService.js` e `Header.jsx`, mappare esplicitamente `current.pm10`, `current.pm2_5` e `current.nitrogen_dioxide`. Rimuovere il fallback hardcoded a 24.5°C; mostrare lo stato con orario dell'ultima lettura (es. *"Aggiornato ore 14:15"* o *"n/d"*).
-- [ ] **A.3 Pulizia e Stabilità dell'Header**: Rimuovere il claim "WCAG 2.1 AA" dalla barra superiore (spostarlo nel footer come obiettivo in corso). Rimuovere il badge di versione discordante `v2.5`. Applicare `whitespace-nowrap` sui chip istituzionali per evitare a capo antiestetici.
-- [ ] **A.4 Badge di Trasparenza sui KPI Hero**: Inserire il componente `DataSourceBadge` visibile accanto ai 3 KPI della Hero (CO₂, Banchine PEBA, Transiti Asse) e all'Indice ESG, etichettandoli onestamente come *Live*, *Calcolato ISPRA* o *Modello PUMS*.
-- [ ] **A.5 Disclaimer Form Segnalazioni PEBA**: In `OpenDataView.jsx`, anteporre `DEMO-` al numero di protocollo generato e mostrare il disclaimer: *"Memorizzato a fini dimostrativi su questo dispositivo — Non costituisce protocollo ufficiale del Comune di Pisa"*.
+- [x] **A.1 Tour Onboarding Default Chiuso**: Modificare `App.jsx` e `OnboardingTour.jsx` affinché il tour non parta automaticamente. Si apre solo al clic su "Guida Rapida" o "Avvia Tour". Supporto tasto Esc e click sull'overlay per chiusura immediata.
+- [x] **A.2 Correzione Mapping Aria Live (PM10 / PM2.5 / NO₂)**: In `liveAirQualityService.js` e `Header.jsx`, mappare esplicitamente `current.pm10`, `current.pm2_5` e `current.nitrogen_dioxide`. Rimuovere il fallback hardcoded a 24.5°C; mostrare lo stato con orario dell'ultima lettura (es. *"Aggiornato ore 14:15"* o *"n/d"*).
+- [x] **A.3 Pulizia e Stabilità dell'Header**: Rimuovere il claim "WCAG 2.1 AA" dalla barra superiore (spostarlo nel footer come obiettivo in corso). Rimuovere il badge di versione discordante `v2.5`. Applicare `whitespace-nowrap` sui chip istituzionali per evitare a capo antiestetici.
+- [x] **A.4 Badge di Trasparenza sui KPI Hero**: Inserire il componente `DataSourceBadge` visibile accanto ai 3 KPI della Hero (CO₂, Banchine PEBA, Transiti Asse) e all'Indice ESG, etichettandoli onestamente come *Live*, *Calcolato ISPRA* o *Modello PUMS*.
+- [x] **A.5 Disclaimer Form Segnalazioni PEBA**: In `OpenDataView.jsx`, anteporre `DEMO-` al numero di protocollo generato e mostrare il disclaimer: *"Memorizzato a fini dimostrativi su questo dispositivo — Non costituisce protocollo ufficiale del Comune di Pisa"*.
 
 ### 🟡 SPRINT B — Priorità P1 (Rifinitura Grafica & Coerenza)
 - [ ] **B.1 Riorganizzazione Gerarchica Executive**: Assicurare che le 4 Card ESG siano immediatamente visibili above-the-fold dopo l'apertura della pagina.

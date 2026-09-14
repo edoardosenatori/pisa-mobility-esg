@@ -111,19 +111,13 @@ export default function Header({
               <div>
                 <div className="flex items-center gap-2">
                   <h1 className="text-base sm:text-lg font-black text-white tracking-tight flex items-center gap-2">
-                    <span>Pisa Mobility & ESG Dashboard</span>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30 hidden sm:inline-block">
-                      PM-ESG v2.5
-                    </span>
+                    <span className="whitespace-nowrap">Pisa Mobility & ESG Dashboard</span>
                   </h1>
                 </div>
                 <p className="text-xs text-slate-400 flex items-center gap-2">
-                  <span className="text-slate-300 font-semibold">Comune di Pisa</span>
+                  <span className="text-slate-300 font-semibold whitespace-nowrap">Comune di Pisa</span>
                   <span>•</span>
-                  <span>PUMS 2020-2030</span>
-                  <span className="hidden md:inline text-emerald-400 font-medium flex items-center gap-1">
-                    <ShieldCheck className="w-3.5 h-3.5 inline text-emerald-400" /> WCAG 2.1 AA
-                  </span>
+                  <span className="whitespace-nowrap">PUMS 2020-2030</span>
                 </p>
               </div>
             </div>
@@ -212,17 +206,24 @@ export default function Header({
               href="https://open-meteo.com/en/docs/air-quality-api"
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden xl:flex items-center gap-2 bg-slate-950/80 hover:bg-slate-900 px-2.5 py-1.5 rounded-lg border border-slate-800 hover:border-emerald-500/50 text-xs transition group cursor-pointer"
-              title="Dati reali verificati Open-Meteo & Copernicus CAMS (Stazione Pisa). Clicca per aprire la documentazione ufficiale API."
+              className="hidden xl:flex items-center gap-2 bg-slate-950/80 hover:bg-slate-900 px-2.5 py-1.5 rounded-lg border border-slate-800 hover:border-emerald-500/50 text-xs transition group cursor-pointer whitespace-nowrap"
+              title={`Dati verificati Open-Meteo & Copernicus CAMS (Stazione Pisa). ${liveAirQuality?.lastSuccessTime ? `Ultima lettura: ${liveAirQuality.lastSuccessTime}` : (liveAirQuality?.isLive ? 'Live' : 'Stato: Non disponibile (offline)')}`}
             >
               <div className="flex items-center gap-1 text-amber-300">
                 <CloudSun className="w-3.5 h-3.5 text-amber-400" />
-                <span>Pisa: <strong>{liveWeather?.temperature ?? '24.5'}°C</strong></span>
+                <span>Pisa: <strong>{liveWeather?.temperature != null ? `${liveWeather.temperature}°C` : 'n/d'}</strong></span>
               </div>
               <span className="text-slate-600">|</span>
-              <div className="flex items-center gap-1 text-emerald-400">
+              <div className="flex items-center gap-1.5 text-emerald-400">
                 <Wind className="w-3.5 h-3.5 text-emerald-400" />
-                <span>PM10: <strong>{liveAirQuality?.pm10 ?? '18.2'} µg/m³</strong></span>
+                <span>PM10: <strong>{liveAirQuality?.pm10 != null ? `${liveAirQuality.pm10} µg/m³` : 'n/d'}</strong></span>
+                <span className="text-slate-600">•</span>
+                <span className="text-teal-300">PM2.5: <strong>{liveAirQuality?.pm2_5 != null ? `${liveAirQuality.pm2_5} µg/m³` : 'n/d'}</strong></span>
+                <span className="text-slate-600">•</span>
+                <span className="text-cyan-300">NO₂: <strong>{liveAirQuality?.no2 != null ? `${liveAirQuality.no2} µg/m³` : 'n/d'}</strong></span>
+                {liveAirQuality?.lastSuccessTime && (
+                  <span className="text-[10px] text-slate-400 font-mono ml-0.5">({liveAirQuality.lastSuccessTime})</span>
+                )}
                 <span className="text-[10px] text-slate-500 group-hover:text-emerald-400">↗</span>
               </div>
             </a>

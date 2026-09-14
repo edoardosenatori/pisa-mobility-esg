@@ -21,95 +21,54 @@ export const ESG_FACTORS = {
   pisaPopulation: 90000,      // Popolazione residente Pisa + ~45.000 studenti fuori sede
 };
 
-/**
- * Fetch dati reali sulla qualità dell'aria a Pisa da Open-Meteo / Copernicus CAMS
- */
-export async function fetchPisaAirQuality() {
-  try {
-    const url = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${PISA_COORDINATES.lat}&longitude=${PISA_COORDINATES.lng}&current=pm10,pm2_5,carbon_monoxide,nitrogen_dioxide,european_aqi&hourly=pm10,pm2_5&timezone=Europe%2FRome`;
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
-    const data = await response.json();
-
-    const current = data.current || {};
-    return {
-      success: true,
-      source: 'Open-Meteo / Copernicus CAMS Pisa Station',
-      endpoint: url,
-      timestamp: new Date().toISOString(),
-      pm10: current.pm10 ?? 18.4,
-      pm2_5: current.pm2_5 ?? 11.2,
-      no2: current.nitrogen_dioxide ?? 22.5,
-      co: current.carbon_monoxide ?? 280,
-      aqi: current.european_aqi ?? 28, // Indice qualità aria europeo (0-100)
-      aqiLabel: getAqiLabel(current.european_aqi ?? 28),
-      isLive: true
-    };
-  } catch (error) {
-    console.warn('Fallback air quality data used:', error);
-    return {
-      success: false,
-      source: 'ARPAT Toscana / Stazione Pisa Passi (Valori Consolidati)',
-      endpoint: 'https://air-quality-api.open-meteo.com/v1/air-quality (Offline Fallback)',
-      timestamp: new Date().toISOString(),
-      pm10: 18.2,
-      pm2_5: 11.4,
-      no2: 21.8,
-      co: 275,
-      aqi: 30,
-      aqiLabel: 'Buona',
-      isLive: false,
-      error: error.message
-    };
-  }
-}
+export { fetchPisaAirQuality, getAqiLabel } from './liveAirQualityService';
 
 /**
  * Fetch dati meteo reali a Pisa
+ * Se l'API fallisce o è offline, restituisce null per i valori numerici e lastSuccessTime.
  */
-export async function fetchPisaWeather() {
+export async function fetchPisaWeather(previousSuccessTime = null) {
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${PISA_COORDINATES.lat}&longitude=${PISA_COORDINATES.lng}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m&timezone=Europe%2FRome`;
+
   try {
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${PISA_COORDINATES.lat}&longitude=${PISA_COORDINATES.lng}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m&timezone=Europe%2FRome`;
     const response = await fetch(url);
     if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
     const data = await response.json();
 
     const current = data.current || {};
+    const now = new Date();
+    const formattedTime = now.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+
     return {
       success: true,
       source: 'Open-Meteo Forecast Pisa Real-Time',
       endpoint: url,
-      timestamp: new Date().toISOString(),
-      temperature: current.temperature_2m ?? 24.5,
-      humidity: current.relative_humidity_2m ?? 65,
-      precipitation: current.precipitation ?? 0,
-      windSpeed: current.wind_speed_10m ?? 8.5,
-      condition: getWeatherDescription(current.weather_code ?? 0),
+      timestamp: now.toISOString(),
+      lastSuccessTime: `ore ${formattedTime}`,
+      temperature: current.temperature_2m !== undefined && current.temperature_2m !== null ? Number(current.temperature_2m) : null,
+      humidity: current.relative_humidity_2m !== undefined && current.relative_humidity_2m !== null ? Number(current.relative_humidity_2m) : null,
+      precipitation: current.precipitation !== undefined && current.precipitation !== null ? Number(current.precipitation) : null,
+      windSpeed: current.wind_speed_10m !== undefined && current.wind_speed_10m !== null ? Number(current.wind_speed_10m) : null,
+      condition: current.weather_code != null ? getWeatherDescription(current.weather_code) : 'n/d',
       isLive: true
     };
   } catch (error) {
-    console.warn('Fallback weather used:', error);
+    console.warn('Open-Meteo Forecast offline/non raggiungibile:', error);
     return {
       success: false,
-      source: 'Stazione Meteorologica Pisa San Giusto (Fallback)',
-      endpoint: 'https://api.open-meteo.com/v1/forecast',
-      timestamp: new Date().toISOString(),
-      temperature: 24.0,
-      humidity: 60,
-      precipitation: 0,
-      windSpeed: 7.2,
-      condition: 'Sereno / Poco Nuvoloso',
-      isLive: false
+      source: 'Open-Meteo Forecast (Offline)',
+      endpoint: url,
+      timestamp: null,
+      lastSuccessTime: previousSuccessTime || null,
+      temperature: null,
+      humidity: null,
+      precipitation: null,
+      windSpeed: null,
+      condition: 'n/d',
+      isLive: false,
+      error: error.message
     };
   }
-}
-
-function getAqiLabel(aqi) {
-  if (aqi <= 20) return 'Eccellente';
-  if (aqi <= 40) return 'Buona';
-  if (aqi <= 60) return 'Moderata';
-  if (aqi <= 80) return 'Scadente';
-  return 'Critica';
 }
 
 function getWeatherDescription(code) {

@@ -52,6 +52,9 @@ export default function MapView({ onTriggerCivicReport, onInspectMetric, citizen
   // Active quick node
   const [activeNodeId, setActiveNodeId] = useState('all');
 
+  // Mobile Drawer Toggle for Styles & Legend
+  const [mobileControlsOpen, setMobileControlsOpen] = useState(false);
+
   const mapContainerRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const tileLayerRef = useRef(null);
@@ -395,8 +398,8 @@ export default function MapView({ onTriggerCivicReport, onInspectMetric, citizen
       {/* Main Map & Interactive Sidebar Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
-        {/* Left Sidebar (3/12): Layer Toggles & Map Styles */}
-        <div className="lg:col-span-3 space-y-4">
+        {/* Left Sidebar (3/12): Layer Toggles & Map Styles (Collapsible on Mobile, standard on Desktop) */}
+        <div className={`order-2 lg:order-1 lg:col-span-3 space-y-4 ${mobileControlsOpen ? 'block animate-in fade-in duration-200' : 'hidden lg:block'}`}>
           
           {/* Base Map Style Switcher */}
           <div className="bg-slate-800/70 p-4 rounded-2xl border border-slate-700/70 backdrop-blur-xl shadow-lg space-y-3">
@@ -633,31 +636,113 @@ export default function MapView({ onTriggerCivicReport, onInspectMetric, citizen
 
         </div>
 
-        {/* Center / Right Area (9/12): Map Viewport + Detail Inspector */}
-        <div className="lg:col-span-9 space-y-4">
+        {/* Center / Right Area (9/12): Map Viewport (First on Mobile, right on Desktop) */}
+        <div className="order-1 lg:order-2 lg:col-span-9 space-y-3">
           
+          {/* Quick Horizontal Layer Chips Bar (Mobile & Tablet) */}
+          <div className="flex lg:hidden items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
+            <button
+              type="button"
+              onClick={() => setShowTraffic(!showTraffic)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border whitespace-nowrap transition cursor-pointer shrink-0 ${
+                showTraffic 
+                  ? 'bg-rose-950/90 text-rose-300 border-rose-500 shadow-sm' 
+                  : 'bg-slate-900/80 text-slate-400 border-slate-800'
+              }`}
+            >
+              <span className={`w-2 h-2 rounded-full ${showTraffic ? 'bg-rose-400 animate-pulse' : 'bg-slate-600'}`} />
+              <span>Traffico</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setShowBikeLanes(!showBikeLanes)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border whitespace-nowrap transition cursor-pointer shrink-0 ${
+                showBikeLanes 
+                  ? 'bg-emerald-950/90 text-emerald-300 border-emerald-500 shadow-sm' 
+                  : 'bg-slate-900/80 text-slate-400 border-slate-800'
+              }`}
+            >
+              <span className={`w-2 h-2 rounded-full ${showBikeLanes ? 'bg-emerald-400' : 'bg-slate-600'}`} />
+              <span>Ciclopiste</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setShowSharing(!showSharing)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border whitespace-nowrap transition cursor-pointer shrink-0 ${
+                showSharing 
+                  ? 'bg-amber-950/90 text-amber-300 border-amber-500 shadow-sm' 
+                  : 'bg-slate-900/80 text-slate-400 border-slate-800'
+              }`}
+            >
+              <span className={`w-2 h-2 rounded-full ${showSharing ? 'bg-amber-400' : 'bg-slate-600'}`} />
+              <span>Sharing</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setShowPeba(!showPeba)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border whitespace-nowrap transition cursor-pointer shrink-0 ${
+                showPeba 
+                  ? 'bg-blue-950/90 text-blue-300 border-blue-500 shadow-sm' 
+                  : 'bg-slate-900/80 text-slate-400 border-slate-800'
+              }`}
+            >
+              <span className={`w-2 h-2 rounded-full ${showPeba ? 'bg-blue-400' : 'bg-slate-600'}`} />
+              <span>PEBA</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setShowIsochrones(!showIsochrones)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border whitespace-nowrap transition cursor-pointer shrink-0 ${
+                showIsochrones 
+                  ? 'bg-purple-950/90 text-purple-300 border-purple-500 shadow-sm' 
+                  : 'bg-slate-900/80 text-slate-400 border-slate-800'
+              }`}
+            >
+              <span className={`w-2 h-2 rounded-full ${showIsochrones ? 'bg-purple-400' : 'bg-slate-600'}`} />
+              <span>Isocrone</span>
+            </button>
+
+            {/* Toggle Stili & Legenda Mobile */}
+            <button
+              type="button"
+              onClick={() => setMobileControlsOpen(!mobileControlsOpen)}
+              className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold border transition cursor-pointer shrink-0 ${
+                mobileControlsOpen
+                  ? 'bg-blue-600 text-white border-blue-400 shadow-md'
+                  : 'bg-slate-800 text-slate-300 border-slate-700 hover:text-white'
+              }`}
+            >
+              <SlidersHorizontal className="w-3 h-3" />
+              <span>{mobileControlsOpen ? '✕ Chiudi' : '⚙️ Stili & Legenda'}</span>
+            </button>
+          </div>
+
           {/* Map Container */}
-          <div className="relative w-full h-[540px] rounded-2xl overflow-hidden border border-slate-700/80 shadow-2xl bg-slate-950">
+          <div className="relative w-full h-[58vh] sm:h-[500px] lg:h-[560px] rounded-2xl overflow-hidden border border-slate-700/80 shadow-2xl bg-slate-950">
             <div ref={mapContainerRef} className="w-full h-full" />
 
             {/* Over-map Quick Badge */}
-            <div className="absolute top-4 left-4 z-[500] bg-slate-900/95 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-slate-700 text-xs font-semibold text-white shadow-xl flex items-center gap-2">
+            <div className="absolute top-3 left-3 z-[500] bg-slate-900/95 backdrop-blur-md px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-xl border border-slate-700 text-[10px] sm:text-xs font-semibold text-white shadow-xl flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-              <span>Sensori IoT & Flusso Traffico Live</span>
+              <span>Traffico Live</span>
             </div>
 
             {/* Action to report civic barrier on this map */}
             <button
               onClick={() => onTriggerCivicReport && onTriggerCivicReport()}
-              className="absolute top-4 right-4 z-[500] bg-blue-600 hover:bg-blue-500 text-white px-3.5 py-1.5 rounded-xl text-xs font-bold shadow-xl border border-blue-400/40 flex items-center gap-1.5 transition cursor-pointer"
+              className="absolute top-3 right-3 z-[500] bg-blue-600 hover:bg-blue-500 text-white px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-xl text-[10px] sm:text-xs font-bold shadow-xl border border-blue-400/40 flex items-center gap-1 transition cursor-pointer"
             >
-              <Plus className="w-4 h-4" /> Segnala Barriera PEBA
+              <Plus className="w-3.5 h-3.5" /> Segnala PEBA
             </button>
           </div>
 
-          {/* Detail Inspector Panel when user clicks a node or traffic line */}
+          {/* Detail Inspector Panel: Bottom Sheet on Mobile, Static card on Desktop */}
           {selectedItem && (
-            <div className="bg-slate-800/95 p-5 rounded-2xl border border-blue-500/50 shadow-2xl backdrop-blur-2xl animate-in slide-in-from-bottom-3 duration-200">
+            <div className="lg:static fixed lg:relative bottom-16 sm:bottom-20 lg:bottom-auto inset-x-3 sm:inset-x-6 lg:inset-x-auto z-[50] lg:z-auto bg-slate-900/98 lg:bg-slate-800/95 p-4 sm:p-5 rounded-2xl border border-blue-500/60 shadow-2xl backdrop-blur-2xl animate-in slide-in-from-bottom-3 duration-200 max-h-[70vh] overflow-y-auto">
               <div className="flex items-start justify-between gap-4">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2 flex-wrap">

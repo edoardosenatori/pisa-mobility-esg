@@ -140,7 +140,7 @@ export default function OpenDataView({ onShowToast, onInspectMetric, citizenGuid
     setTimeout(() => {
       const newIdNum = Math.floor(1000 + Math.random() * 9000);
       const newReportId = `SEG-PSA-2026-${newIdNum}`;
-      const newProtocol = `PROT-MOB-2026/${Math.floor(900 + Math.random() * 500)}`;
+      const newProtocol = `DEMO-PEBA-2026/${String(Math.floor(1 + Math.random() * 999)).padStart(3, '0')}`;
 
       const newReport = {
         id: newReportId,
@@ -171,9 +171,9 @@ export default function OpenDataView({ onShowToast, onInspectMetric, citizenGuid
       if (onShowToast) {
         onShowToast({
           type: 'success',
-          title: 'Segnalazione Civica Inviata con Successo!',
-          message: `La segnalazione per "${newReport.categoria}" è stata salvata e protocollata.`,
-          meta: `Protocollo Telematico: ${newProtocol} • ID: ${newReportId}`
+          title: 'Segnalazione Civica Registrata con Successo!',
+          message: `La segnalazione per "${newReport.categoria}" è stata memorizzata a fini dimostrativi.`,
+          meta: `Protocollo Dimostrativo: ${newProtocol} • ID: ${newReportId}`
         });
       }
     }, 600);
@@ -567,8 +567,17 @@ export default function OpenDataView({ onShowToast, onInspectMetric, citizenGuid
               <span>Invia Segnalazione Civica (PEBA & Mobilità)</span>
             </h3>
             <p className="text-xs text-slate-300 mt-1">
-              Segnala barriere architettoniche, anomalie su piste ciclabili o malfunzionamenti degli stalli sharing. La segnalazione viene memorizzata in locale e protocollata.
+              Segnala barriere architettoniche, anomalie su piste ciclabili o malfunzionamenti degli stalli sharing.
             </p>
+
+            {/* Disclaimer di Trasparenza Protocollo Civico */}
+            <div className="mt-3 p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-2.5 text-xs text-amber-200/90">
+              <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+              <div>
+                <strong className="text-amber-300 font-semibold block">Avviso di Trasparenza Istituzionale:</strong>
+                <span>Memorizzato a fini dimostrativi su questo browser — Non costituisce formale protocollo dell'ente.</span>
+              </div>
+            </div>
           </div>
 
           <form onSubmit={handleSubmitCivicReport} className="space-y-4">
@@ -715,7 +724,7 @@ export default function OpenDataView({ onShowToast, onInspectMetric, citizenGuid
                 <Clock className="w-5 h-5 text-emerald-400" />
                 <span>Registro Pubblico Segnalazioni Civiche</span>
               </h3>
-              <p className="text-xs text-slate-400">Feed trasparente memorizzato in locale con protocollo telematico</p>
+              <p className="text-xs text-slate-400">Feed dimostrativo locale con protocolli DEMO-PEBA</p>
             </div>
             <span className="text-xs font-bold text-emerald-400 bg-emerald-950/80 px-2.5 py-1 rounded-full border border-emerald-800/50">
               {civicReports.length} Attive

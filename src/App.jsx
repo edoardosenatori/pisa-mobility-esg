@@ -9,6 +9,7 @@ import Toast from './components/ui/Toast';
 import DataRequirementsModal from './components/ui/DataRequirementsModal';
 import OnboardingTour from './components/ui/OnboardingTour';
 import ExecutiveReportModal from './components/ui/ExecutiveReportModal';
+import BottomNav from './components/layout/BottomNav';
 import { fetchPisaAirQuality, fetchPisaWeather } from './services/liveDataService';
 
 export default function App() {
@@ -25,28 +26,12 @@ export default function App() {
     }
   });
 
-  // Onboarding Spotlight Tour State
+  // Onboarding Spotlight Tour State (apertura solo su azione utente)
   const [isTourOpen, setIsTourOpen] = useState(false);
   const [tourStepIndex, setTourStepIndex] = useState(0);
 
   // Executive Report A4 Modal State
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
-
-  // Auto-start onboarding tour on first visit (after 1 second)
-  useEffect(() => {
-    try {
-      const tourSeen = localStorage.getItem('pm_esg_tour_seen');
-      if (!tourSeen) {
-        const timer = setTimeout(() => {
-          setIsTourOpen(true);
-          localStorage.setItem('pm_esg_tour_seen', 'true');
-        }, 1000);
-        return () => clearTimeout(timer);
-      }
-    } catch (e) {
-      console.warn('LocalStorage tour check error:', e);
-    }
-  }, []);
 
   // Sync citizen mode changes to localStorage
   useEffect(() => {
@@ -152,7 +137,7 @@ export default function App() {
       />
 
       {/* Main Viewport Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 pb-24 lg:pb-8">
         {activeTab === 'executive' && (
           <ExecutiveView 
             onNavigateToMap={() => setActiveTab('map')}
@@ -216,6 +201,9 @@ export default function App() {
 
       {/* Institutional Toast Notifications */}
       <Toast toast={toast} onClose={() => setToast(null)} />
+
+      {/* Mobile Bottom Navigation Bar (Thumb Zone) */}
+      <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
 
       {/* Institutional Footer */}
       <Footer />

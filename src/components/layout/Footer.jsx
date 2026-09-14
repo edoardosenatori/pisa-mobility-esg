@@ -16,13 +16,13 @@ export default function Footer() {
             <p className="text-slate-400 text-xs leading-relaxed max-w-md">
               Il cruscotto PM-ESG fornisce accesso trasparente in tempo reale ai parametri di sostenibilità ecologica, inclusione sociale PEBA, impatto economico e governance del Piano Urbano della Mobilità Sostenibile (PUMS 2020-2030).
             </p>
-            <div className="flex items-center gap-3 pt-2 text-[11px] text-slate-400">
-              <span className="flex items-center gap-1 text-emerald-400">
-                <ShieldCheck className="w-3.5 h-3.5" /> Conforme WCAG 2.1 Livello AA
-              </span>
-              <span>•</span>
-              <span>Dati aperti CC-BY 4.0</span>
-            </div>
+              <div className="flex items-center gap-3 pt-2 text-[11px] text-slate-400">
+                <span className="flex items-center gap-1 text-slate-300">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> Obiettivo Accessibilità: WCAG 2.1 AA
+                </span>
+                <span>•</span>
+                <span>Dati aperti CC-BY 4.0</span>
+              </div>
           </div>
 
           {/* Colonna 2: Partner Istituzionali */}

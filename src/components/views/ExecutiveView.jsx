@@ -58,6 +58,8 @@ export default function ExecutiveView({
 }) {
   const [selectedDimension, setSelectedDimension] = useState('environmental');
   const [chartMetric, setChartMetric] = useState('co2');
+  const [mobileTab, setMobileTab] = useState('esg'); // 'esg' | 'simulator' | 'targets'
+  const [activeKpiIndex, setActiveKpiIndex] = useState(0);
 
   const totalCo2Evitata = HISTORICAL_CO2_SERIES.reduce((acc, curr) => acc + curr.co2Evitata, 0);
   const totalTargetPums = HISTORICAL_CO2_SERIES.reduce((acc, curr) => acc + curr.targetPUMS, 0);
@@ -67,17 +69,17 @@ export default function ExecutiveView({
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
       
-      {/* 1. HERO SECTION DINAMICA GLASSMORPHISM */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/90 to-blue-950/60 p-6 sm:p-8 border border-slate-700/70 shadow-2xl backdrop-blur-2xl">
+      {/* 1. HERO SECTION DINAMICA GLASSMORPHISM (COMPATTA MOBILE HUD) */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/90 to-blue-950/60 p-4 sm:p-8 border border-slate-700/70 shadow-2xl backdrop-blur-2xl">
         {/* Subtle Ambient Glow */}
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-blue-600/15 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-emerald-600/15 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-          <div className="space-y-3 max-w-3xl">
+        <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5 sm:gap-6">
+          <div className="space-y-3 max-w-3xl w-full">
             <div className="flex items-center gap-2 flex-wrap">
               <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1.5 shadow-sm">
-                <Sparkles className="w-3.5 h-3.5 text-emerald-400" /> PUMS Pisa 2020-2030 • Smart City Control Room
+                <Sparkles className="w-3.5 h-3.5 text-emerald-400" /> PUMS Pisa 2020-2030 • Control Room
               </span>
               <DataSourceBadge
                 status="REAL_LIVE"
@@ -86,50 +88,72 @@ export default function ExecutiveView({
               />
             </div>
 
-            <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight leading-tight">
+            <h1 className="text-xl sm:text-4xl font-black text-white tracking-tight leading-tight">
               Pisa Mobility & ESG Dashboard
             </h1>
 
-            <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-normal">
+            <p className="text-xs sm:text-base text-slate-300 leading-relaxed font-normal">
               Monitoraggio in tempo reale di traffico dolce, accessibilità e aria pulita sull'Asse Pilota.
             </p>
 
+            {/* Mobile Compact ESG Index Bar */}
+            <div className="xl:hidden flex items-center justify-between bg-slate-950/80 px-3.5 py-2 rounded-xl border border-slate-800 text-xs w-full shadow-inner">
+              <span className="text-slate-400 font-medium">Indice Sintetico ESG:</span>
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-emerald-400 text-sm">84.8 / 100</span>
+                <DataSourceBadge
+                  status="REAL_CALCULATED"
+                  size="xs"
+                  customLabel="Modello PUMS"
+                  onClick={() => onInspectMetric && onInspectMetric('pisa_pums_deliberation')}
+                />
+              </div>
+            </div>
+
             {/* CTAs */}
-            <div className="flex flex-wrap items-center gap-3 pt-2">
+            <div className="flex flex-wrap items-center gap-2.5 pt-1">
               <button
                 type="button"
                 onClick={() => onStartTour && onStartTour()}
-                className="flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-xl shadow-emerald-950/60 border border-emerald-400/40 transition transform hover:-translate-y-0.5 cursor-pointer"
+                className="flex items-center gap-1.5 px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-lg shadow-emerald-950/50 border border-emerald-400/40 transition cursor-pointer"
               >
-                <Play className="w-4 h-4 fill-white" />
-                <span>Avvia Tour Guidato (1 min)</span>
+                <Play className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-white" />
+                <span>Tour Guidato</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => onOpenReportModal && onOpenReportModal()}
-                className="flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-xl shadow-blue-950/60 border border-blue-400/40 transition transform hover:-translate-y-0.5 cursor-pointer"
+                className="flex items-center gap-1.5 px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-lg shadow-blue-950/50 border border-blue-400/40 transition cursor-pointer"
               >
-                <FileText className="w-4 h-4" />
-                <span>Report PDF A4 Giunta</span>
+                <FileText className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <span>Report A4 Giunta</span>
               </button>
 
               <button
                 type="button"
                 onClick={onNavigateToMap}
-                className="flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-slate-800/90 hover:bg-slate-700/90 text-slate-200 hover:text-white border border-slate-600/70 transition transform hover:-translate-y-0.5 cursor-pointer"
+                className="flex items-center gap-1.5 px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-slate-800/90 hover:bg-slate-700/90 text-slate-200 hover:text-white border border-slate-600/70 transition cursor-pointer"
               >
-                <MapPin className="w-4 h-4 text-blue-400" />
-                <span>Esplora Mappa Asse Pilota</span>
+                <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-400" />
+                <span>Mappa Asse</span>
               </button>
             </div>
           </div>
 
-          {/* Quick Header Widget */}
-          <div className="hidden xl:flex flex-col gap-2.5 bg-slate-950/80 p-4 rounded-2xl border border-slate-800 text-xs min-w-[220px]">
+          {/* Quick Header Widget (Desktop) */}
+          <div className="hidden xl:flex flex-col gap-2.5 bg-slate-950/80 p-4 rounded-2xl border border-slate-800 text-xs min-w-[240px]">
             <div className="flex items-center justify-between text-slate-400 font-medium">
               <span>Indice Sintetico ESG:</span>
-              <span className="font-bold text-emerald-400 text-sm">84.8 / 100</span>
+              <div className="flex items-center gap-1.5">
+                <span className="font-bold text-emerald-400 text-sm">84.8 / 100</span>
+                <DataSourceBadge
+                  status="REAL_CALCULATED"
+                  size="xs"
+                  customLabel="Modello PUMS"
+                  onClick={() => onInspectMetric && onInspectMetric('pisa_pums_deliberation')}
+                />
+              </div>
             </div>
             <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
               <div className="bg-gradient-to-r from-emerald-500 to-blue-500 h-full w-[85%]" />
@@ -140,69 +164,164 @@ export default function ExecutiveView({
           </div>
         </div>
 
-        {/* 3 ANIMATED QUICK NUMBERS BADGES */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 mt-6 pt-6 border-t border-slate-800/80">
-          
-          {/* Quick Number 1: CO2 Risparmiata */}
-          <div className="p-3.5 rounded-2xl bg-slate-950/60 border border-emerald-500/30 flex items-center gap-3.5 backdrop-blur-md">
-            <div className="p-2.5 rounded-xl bg-emerald-950/80 text-emerald-400 border border-emerald-800/60 shrink-0">
-              <TreePine className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                <span>CO₂ Risparmiata</span>
-                <InfoTooltip term="CO2 Evitata" showCitizenBadge={citizenGuide} />
+        {/* 3 ANIMATED QUICK NUMBERS BADGES: HORIZONTAL SNAP CAROUSEL ON MOBILE, 3-COL GRID ON SM+ */}
+        <div className="relative mt-5 sm:mt-6 pt-5 sm:pt-6 border-t border-slate-800/80">
+          <div 
+            className="flex sm:grid sm:grid-cols-3 gap-3.5 overflow-x-auto snap-x snap-mandatory no-scrollbar pb-1"
+            onScroll={(e) => {
+              const scrollLeft = e.currentTarget.scrollLeft;
+              const width = e.currentTarget.offsetWidth;
+              const index = Math.round(scrollLeft / (width * 0.75));
+              setActiveKpiIndex(Math.min(2, Math.max(0, index)));
+            }}
+          >
+            {/* Quick Number 1: CO2 Risparmiata */}
+            <div className="min-w-[80vw] sm:min-w-0 snap-center shrink-0 sm:shrink p-3.5 rounded-2xl bg-slate-950/60 border border-emerald-500/30 flex items-center justify-between gap-3 backdrop-blur-md">
+              <div className="flex items-center gap-3.5">
+                <div className="p-2.5 rounded-xl bg-emerald-950/80 text-emerald-400 border border-emerald-800/60 shrink-0">
+                  <TreePine className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                    <span>CO₂ Risparmiata</span>
+                    <InfoTooltip term="CO2 Evitata" showCitizenBadge={citizenGuide} />
+                  </div>
+                  <div className="text-xl font-black text-white">1.420 t</div>
+                  <span className="text-[10px] font-bold text-emerald-400">+14.8% vs Target PUMS</span>
+                </div>
               </div>
-              <div className="text-xl font-black text-white">1.420 t</div>
-              <span className="text-[10px] font-bold text-emerald-400">+14.8% vs Target PUMS</span>
+              <div className="shrink-0 self-start sm:self-center">
+                <DataSourceBadge
+                  status="REAL_CALCULATED"
+                  size="xs"
+                  customLabel="ISPRA / ACI"
+                  onClick={() => onInspectMetric && onInspectMetric('co2_factors_ispra')}
+                />
+              </div>
             </div>
+
+            {/* Quick Number 2: Fermate Accessibili */}
+            <div className="min-w-[80vw] sm:min-w-0 snap-center shrink-0 sm:shrink p-3.5 rounded-2xl bg-slate-950/60 border border-blue-500/30 flex items-center justify-between gap-3 backdrop-blur-md">
+              <div className="flex items-center gap-3.5">
+                <div className="p-2.5 rounded-xl bg-blue-950/80 text-blue-400 border border-blue-800/60 shrink-0">
+                  <Accessibility className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                    <span>Fermate Accessibili</span>
+                    <InfoTooltip term="PEBA / IAU" showCitizenBadge={citizenGuide} />
+                  </div>
+                  <div className="text-xl font-black text-white">74.2%</div>
+                  <span className="text-[10px] font-bold text-blue-400">142 banchine a norma PEBA</span>
+                </div>
+              </div>
+              <div className="shrink-0 self-start sm:self-center">
+                <DataSourceBadge
+                  status="VIRTUAL_PUMS"
+                  size="xs"
+                  customLabel="Modello PUMS"
+                  onClick={() => onInspectMetric && onInspectMetric('peba_bus_stops')}
+                />
+              </div>
+            </div>
+
+            {/* Quick Number 3: Bici Transitano Oggi */}
+            <div className="min-w-[80vw] sm:min-w-0 snap-center shrink-0 sm:shrink p-3.5 rounded-2xl bg-slate-950/60 border border-purple-500/30 flex items-center justify-between gap-3 backdrop-blur-md">
+              <div className="flex items-center gap-3.5">
+                <div className="p-2.5 rounded-xl bg-purple-950/80 text-purple-400 border border-purple-800/60 shrink-0">
+                  <Bike className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                    <span>Transiti Bici Oggi</span>
+                    <InfoTooltip term="Modal Split" showCitizenBadge={citizenGuide} />
+                  </div>
+                  <div className="text-xl font-black text-white">14.500+</div>
+                  <span className="text-[10px] font-bold text-purple-400">Rilevati su Asse Pilota</span>
+                </div>
+              </div>
+              <div className="shrink-0 self-start sm:self-center">
+                <DataSourceBadge
+                  status="VIRTUAL_PUMS"
+                  size="xs"
+                  customLabel="Modello PUMS"
+                  onClick={() => onInspectMetric && onInspectMetric('bike_counters_inductive_loops')}
+                />
+              </div>
+            </div>
+
           </div>
 
-          {/* Quick Number 2: Fermate Accessibili */}
-          <div className="p-3.5 rounded-2xl bg-slate-950/60 border border-blue-500/30 flex items-center gap-3.5 backdrop-blur-md">
-            <div className="p-2.5 rounded-xl bg-blue-950/80 text-blue-400 border border-blue-800/60 shrink-0">
-              <Accessibility className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                <span>Fermate Accessibili</span>
-                <InfoTooltip term="PEBA / IAU" showCitizenBadge={citizenGuide} />
-              </div>
-              <div className="text-xl font-black text-white">74.2%</div>
-              <span className="text-[10px] font-bold text-blue-400">142 banchine a norma PEBA</span>
-            </div>
+          {/* Mobile Dot Indicators */}
+          <div className="sm:hidden flex items-center justify-center gap-1.5 pt-2">
+            {[0, 1, 2].map((idx) => (
+              <span 
+                key={idx}
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  activeKpiIndex === idx ? 'w-5 bg-emerald-400' : 'w-1.5 bg-slate-700'
+                }`}
+              />
+            ))}
           </div>
-
-          {/* Quick Number 3: Bici Transitano Oggi */}
-          <div className="p-3.5 rounded-2xl bg-slate-950/60 border border-purple-500/30 flex items-center gap-3.5 backdrop-blur-md">
-            <div className="p-2.5 rounded-xl bg-purple-950/80 text-purple-400 border border-purple-800/60 shrink-0">
-              <Bike className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                <span>Transiti Bici Oggi</span>
-                <InfoTooltip term="Modal Split" showCitizenBadge={citizenGuide} />
-              </div>
-              <div className="text-xl font-black text-white">14.500+</div>
-              <span className="text-[10px] font-bold text-purple-400">Rilevati su Asse Pilota</span>
-            </div>
-          </div>
-
         </div>
       </div>
 
+      {/* MOBILE SEGMENTED PILLS CONTROL (STICKY ANTI-SCROLL) */}
+      <div className="lg:hidden sticky top-14 z-30 -mx-4 px-4 py-2.5 bg-slate-950/95 backdrop-blur-2xl border-y border-slate-800 shadow-xl flex items-center gap-2 overflow-x-auto no-scrollbar">
+        <button
+          type="button"
+          onClick={() => setMobileTab('esg')}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition cursor-pointer ${
+            mobileTab === 'esg'
+              ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-950/50 border border-blue-400/40'
+              : 'bg-slate-900/80 text-slate-400 hover:text-white border border-slate-800'
+          }`}
+        >
+          <Layers className="w-3.5 h-3.5" />
+          <span>4 Dimensioni ESG</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setMobileTab('simulator')}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition cursor-pointer ${
+            mobileTab === 'simulator'
+              ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-lg shadow-amber-950/50 border border-amber-400/40'
+              : 'bg-slate-900/80 text-slate-400 hover:text-white border border-slate-800'
+          }`}
+        >
+          <Sparkles className="w-3.5 h-3.5" />
+          <span>Simulatore Meteo</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setMobileTab('targets')}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition cursor-pointer ${
+            mobileTab === 'targets'
+              ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-950/50 border border-emerald-400/40'
+              : 'bg-slate-900/80 text-slate-400 hover:text-white border border-slate-800'
+          }`}
+        >
+          <TrendingUp className="w-3.5 h-3.5" />
+          <span>Trend PUMS & Opere</span>
+        </button>
+      </div>
+
       {/* 2. PREDICTIVE TRAFFIC & WEATHER SIMULATOR BANNER */}
-      <PredictiveTrafficBanner 
-        liveWeather={liveWeather} 
-        citizenGuide={citizenGuide} 
-      />
+      <div className={mobileTab === 'simulator' ? 'block animate-in fade-in duration-200' : 'hidden lg:block'}>
+        <PredictiveTrafficBanner 
+          liveWeather={liveWeather} 
+          citizenGuide={citizenGuide} 
+        />
+      </div>
 
       {/* SECTION 1: 4 ESG CARDS (WITH CITIZEN SUBTITLES AND TOOLTIPS) */}
-      <div id="tour-esg-cards">
-        <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+      <div id="tour-esg-cards" className={mobileTab === 'esg' ? 'block animate-in fade-in duration-200' : 'hidden lg:block'}>
+        <div className="flex items-center justify-between mb-3.5 flex-wrap gap-2">
           <div>
-            <h3 className="text-lg font-bold text-white flex items-center gap-2">
-              <Layers className="w-5 h-5 text-blue-400" />
+            <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+              <Layers className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" />
               <span>Le 4 Dimensioni ESG (Environmental, Social, Economic, Governance)</span>
             </h3>
             <p className="text-xs text-slate-400">
@@ -216,7 +335,42 @@ export default function ExecutiveView({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        {/* Mobile 4-Quadrants Pill Switcher */}
+        <div className="lg:hidden flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-2.5 mb-2">
+          {Object.values(ESG_DIMENSIONS).map((dim) => {
+            const isSel = selectedDimension === dim.id;
+            return (
+              <button
+                key={dim.id}
+                type="button"
+                onClick={() => setSelectedDimension(dim.id)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition cursor-pointer border ${
+                  isSel
+                    ? 'bg-slate-800 text-white border-blue-400 shadow-md shadow-blue-950/60'
+                    : 'bg-slate-900/60 text-slate-400 border-slate-800 hover:text-slate-200'
+                }`}
+              >
+                <span className={`w-2 h-2 rounded-full ${dim.color === 'emerald' ? 'bg-emerald-400' : dim.color === 'blue' ? 'bg-blue-400' : dim.color === 'amber' ? 'bg-amber-400' : 'bg-purple-400'}`} />
+                <span>{dim.shortTitle || dim.title.split(' ')[0]}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Mobile Single Active Card */}
+        <div className="lg:hidden">
+          <EsgCard
+            dimension={ESG_DIMENSIONS[selectedDimension] || Object.values(ESG_DIMENSIONS)[0]}
+            isSelected={true}
+            onClick={() => {}}
+            onInspectMetric={onInspectMetric}
+            liveAirQuality={liveAirQuality}
+            citizenGuide={citizenGuide}
+          />
+        </div>
+
+        {/* Desktop 4-Card Grid */}
+        <div className="hidden lg:grid lg:grid-cols-4 gap-5">
           {Object.values(ESG_DIMENSIONS).map((dimension) => (
             <EsgCard
               key={dimension.id}
@@ -232,7 +386,7 @@ export default function ExecutiveView({
       </div>
 
       {/* SECTION 2: 12-MONTH HISTORICAL CHART & MUNICIPAL TARGETS */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className={`${mobileTab === 'targets' ? 'block animate-in fade-in duration-200' : 'hidden lg:grid'} lg:grid-cols-12 gap-8 space-y-6 lg:space-y-0`}>
         
         {/* Left Col (7/12): 12-Month CO2 Historical Trend Chart */}
         <div className="lg:col-span-7 bg-slate-800/60 p-6 rounded-2xl border border-slate-700/60 backdrop-blur-xl shadow-xl space-y-4">

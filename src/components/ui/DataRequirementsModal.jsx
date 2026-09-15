@@ -103,12 +103,20 @@ export default function DataRequirementsModal({ isOpen, onClose, initialMetricId
                         {isReal ? 'Reale' : 'Virtuale'}
                       </span>
                     </div>
-                    <div className="text-[10px] text-slate-400 flex items-center justify-between">
+                    <div className="text-[10px] text-slate-400 flex items-center justify-between mt-1">
                       <span>Vista: {item.view}</span>
                       {item.officialUrl && (
-                        <span className="text-blue-400 flex items-center gap-0.5 text-[9px]">
-                          Link ↗
-                        </span>
+                        <a
+                          href={item.officialUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-blue-400 hover:text-blue-300 flex items-center gap-1 text-[10px] font-semibold px-1.5 py-0.5 rounded bg-blue-950/80 hover:bg-blue-900/80 border border-blue-700/50 transition cursor-pointer"
+                          title="Apri direttamente la fonte ufficiale in una nuova scheda"
+                        >
+                          <span>Fonte</span>
+                          <ExternalLink className="w-2.5 h-2.5" />
+                        </a>
                       )}
                     </div>
                   </button>
@@ -120,20 +128,42 @@ export default function DataRequirementsModal({ isOpen, onClose, initialMetricId
           {/* Right Column: Detailed Specification & Requirements (7/12) */}
           <div className="md:col-span-7 p-6 space-y-5 bg-slate-900/60">
             
-            {/* Status & Name Card */}
-            <div>
-              <div className="flex items-center gap-2 mb-2 flex-wrap">
-                <span className={`px-2.5 py-1 rounded-full text-xs font-bold border ${statusConfig.badgeClass}`}>
-                  ● {statusConfig.label}
-                </span>
-                <span className="text-xs text-slate-400">Sezione: <strong>{currentItem.view}</strong></span>
+            {/* Status & Name Card with Direct Top Button */}
+            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 pb-3 border-b border-slate-800">
+              <div className="space-y-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1 flex-wrap">
+                  <span className={`px-2.5 py-1 rounded-full text-xs font-bold border ${statusConfig.badgeClass}`}>
+                    ● {statusConfig.label}
+                  </span>
+                  <span className="text-xs text-slate-400">Sezione: <strong>{currentItem.view}</strong></span>
+                </div>
+                <h4 className="text-lg sm:text-xl font-bold text-white leading-snug">{currentItem.name}</h4>
               </div>
-              <h4 className="text-lg sm:text-xl font-bold text-white leading-snug">{currentItem.name}</h4>
+
+              {currentItem.officialUrl && (
+                <a
+                  href={currentItem.officialUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-lg shadow-blue-950/60 border border-blue-400/50 transition shrink-0 cursor-pointer whitespace-nowrap self-start"
+                  title={`Apri direttamente in nuova scheda: ${currentItem.officialPortalName || 'Piattaforma Ufficiale'}`}
+                >
+                  <span>Apri Fonte Ufficiale</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              )}
             </div>
 
-            {/* Current Source Info */}
+            {/* Current Source Info & Direct Verified Banner */}
             <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-2">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Origine & Fonte Ufficiale:</span>
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Origine & Fonte Ufficiale:</span>
+                {currentItem.officialPortalName && (
+                  <span className="text-[10px] text-blue-300 bg-blue-950/70 border border-blue-800/60 px-2 py-0.5 rounded-full flex items-center gap-1">
+                    <Link2 className="w-3 h-3 text-blue-400" /> {currentItem.officialPortalName}
+                  </span>
+                )}
+              </div>
               <p className="text-xs text-slate-200 font-mono bg-slate-900 p-2.5 rounded-xl border border-slate-800 leading-relaxed">
                 {currentItem.currentSource}
               </p>
@@ -141,30 +171,6 @@ export default function DataRequirementsModal({ isOpen, onClose, initialMetricId
                 <span>Frequenza Aggiornamento: <strong>{currentItem.updateFrequency}</strong></span>
               </div>
             </div>
-
-            {/* Official Platform Direct Verified Link Banner */}
-            {currentItem.officialUrl && (
-              <div className="p-4 rounded-2xl bg-blue-950/40 border border-blue-500/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="space-y-0.5">
-                  <span className="text-[10px] font-bold text-blue-300 uppercase tracking-wider flex items-center gap-1">
-                    <Link2 className="w-3 h-3 text-blue-400" /> Fonte Istituzionale Verificata
-                  </span>
-                  <div className="text-xs font-bold text-white">
-                    {currentItem.officialPortalName || 'Portale Ufficiale'}
-                  </div>
-                </div>
-
-                <a
-                  href={currentItem.officialUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-950/50 border border-blue-400/50 transition shrink-0 cursor-pointer"
-                >
-                  <span>Apri Piattaforma</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            )}
 
             {/* If Already Real */}
             {currentItem.requirementsToMakeReal === null ? (

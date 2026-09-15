@@ -22,6 +22,7 @@ export const TOUR_STEPS = [
   {
     id: 'step-header',
     tab: 'executive',
+    subTab: 'esg',
     targetId: 'tour-header-controls',
     title: '1. Dati Live Copernicus & Switch Cittadini',
     subtitle: 'Control Room Istituzionale',
@@ -32,6 +33,7 @@ export const TOUR_STEPS = [
   {
     id: 'step-esg-cards',
     tab: 'executive',
+    subTab: 'esg',
     targetId: 'tour-esg-cards',
     title: '2. Le 4 Dimensioni ESG del PUMS',
     subtitle: 'Environmental, Social, Economic, Governance',
@@ -42,6 +44,7 @@ export const TOUR_STEPS = [
   {
     id: 'step-predictive-traffic',
     tab: 'executive',
+    subTab: 'simulator',
     targetId: 'tour-predictive-traffic',
     title: '3. Simulatore Predittivo AI Meteo-Traffico',
     subtitle: 'AI Smart City Engine per i Lungarni',
@@ -105,23 +108,43 @@ export default function OnboardingTour({
   const isLastStep = currentStepIndex === TOUR_STEPS.length - 1;
   const StepIcon = step.icon || Sparkles;
 
-  // Sync tab when step changes
+  // Sync tab & subTab when step changes
   useEffect(() => {
     if (!isOpen) return;
     if (step && step.tab) {
       onSetActiveTab(step.tab);
     }
-  }, [currentStepIndex, isOpen]);
+    // Dispatch custom event for sub-tab synchronization across views
+    window.dispatchEvent(new CustomEvent('pm-esg-tour-step', { 
+      detail: { 
+        tab: step?.tab, 
+        subTab: step?.subTab, 
+        targetId: step?.targetId 
+      } 
+    }));
+  }, [currentStepIndex, isOpen, step]);
 
-  // Position the spotlight cutout over the target element
+  // Position the spotlight cutout over the target element & track during smooth scroll
   useEffect(() => {
     if (!isOpen) return;
 
-    const updateHighlight = () => {
+    let animId = null;
+    let isTracking = true;
+
+    const updateHighlight = (shouldScroll = false) => {
       const targetEl = document.getElementById(step.targetId);
       if (targetEl) {
         const rect = targetEl.getBoundingClientRect();
-        targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // If element is hidden or not rendered yet (width 0 or height 0), don't draw a broken 16x16 box
+        if (rect.width === 0 || rect.height === 0) {
+          setHighlightRect(null);
+          return;
+        }
+
+        if (shouldScroll) {
+          targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
 
         setHighlightRect({
           top: Math.max(10, rect.top - 8),
@@ -134,14 +157,31 @@ export default function OnboardingTour({
       }
     };
 
-    const timer = setTimeout(updateHighlight, 350);
-    window.addEventListener('resize', updateHighlight);
-    window.addEventListener('scroll', updateHighlight);
+    // Delay slightly to let React render any subTab changes, then scroll and track
+    const initialTimer = setTimeout(() => {
+      updateHighlight(true);
+
+      const start = Date.now();
+      const loop = () => {
+        if (!isTracking) return;
+        updateHighlight(false);
+        if (Date.now() - start < 650) {
+          animId = requestAnimationFrame(loop);
+        }
+      };
+      animId = requestAnimationFrame(loop);
+    }, 120);
+
+    const onScrollOrResize = () => updateHighlight(false);
+    window.addEventListener('resize', onScrollOrResize, { passive: true });
+    window.addEventListener('scroll', onScrollOrResize, { passive: true });
 
     return () => {
-      clearTimeout(timer);
-      window.removeEventListener('resize', updateHighlight);
-      window.removeEventListener('scroll', updateHighlight);
+      isTracking = false;
+      clearTimeout(initialTimer);
+      if (animId) cancelAnimationFrame(animId);
+      window.removeEventListener('resize', onScrollOrResize);
+      window.removeEventListener('scroll', onScrollOrResize);
     };
   }, [currentStepIndex, isOpen, step]);
 
@@ -169,10 +209,9 @@ export default function OnboardingTour({
   return (
     <div className="fixed inset-0 z-[100000] pointer-events-none animate-in fade-in duration-200">
       
-      {/* 1. CUTOUT SVG SPOTLIGHT MASK (ZERO BLUR, 100% SHARP TARGET ELEMENT) */}
+      {/* 1. CUTOUT SVG SPOTLIGHT MASK (ZERO BLUR, UNLOCKED SCROLL FOR USER) */}
       <svg 
-        className="fixed inset-0 w-full h-full pointer-events-auto"
-        onClick={onClose}
+        className="fixed inset-0 w-full h-full pointer-events-none"
         style={{ zIndex: 100000 }}
       >
         <defs>

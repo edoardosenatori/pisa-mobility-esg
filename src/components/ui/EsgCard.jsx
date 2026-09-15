@@ -205,8 +205,17 @@ export default function EsgCard({
         <DataSourceBadge
           status={dataStatus}
           size="xs"
+          metricId={
+            dimension.id === 'environmental' 
+              ? 'air_quality_pisa' 
+              : dimension.id === 'social' 
+              ? 'peba_bus_stops' 
+              : dimension.id === 'economic' 
+              ? 'co2_factors_ispra' 
+              : 'civic_reports_storage'
+          }
           onClick={(e) => {
-            e.stopPropagation();
+            if (e?.stopPropagation) e.stopPropagation();
             if (onInspectMetric) {
               const metricMap = {
                 environmental: 'air_quality_pisa',

@@ -61,6 +61,17 @@ export default function ExecutiveView({
   const [mobileTab, setMobileTab] = useState('esg'); // 'esg' | 'simulator' | 'targets'
   const [activeKpiIndex, setActiveKpiIndex] = useState(0);
 
+  // Synchronize mobileTab with onboarding tour steps
+  useEffect(() => {
+    const handleTourStep = (e) => {
+      if (e.detail?.subTab) {
+        setMobileTab(e.detail.subTab);
+      }
+    };
+    window.addEventListener('pm-esg-tour-step', handleTourStep);
+    return () => window.removeEventListener('pm-esg-tour-step', handleTourStep);
+  }, []);
+
   const totalCo2Evitata = HISTORICAL_CO2_SERIES.reduce((acc, curr) => acc + curr.co2Evitata, 0);
   const totalTargetPums = HISTORICAL_CO2_SERIES.reduce((acc, curr) => acc + curr.targetPUMS, 0);
   const surplusCo2 = totalCo2Evitata - totalTargetPums;
@@ -84,6 +95,7 @@ export default function ExecutiveView({
               <DataSourceBadge
                 status="REAL_LIVE"
                 customLabel="Sensori IoT & Open-Meteo"
+                metricId="air_quality_pisa"
                 onClick={() => onInspectMetric && onInspectMetric('air_quality_pisa')}
               />
             </div>
@@ -105,6 +117,7 @@ export default function ExecutiveView({
                   status="REAL_CALCULATED"
                   size="xs"
                   customLabel="Modello PUMS"
+                  metricId="pisa_pums_deliberation"
                   onClick={() => onInspectMetric && onInspectMetric('pisa_pums_deliberation')}
                 />
               </div>
@@ -151,6 +164,7 @@ export default function ExecutiveView({
                   status="REAL_CALCULATED"
                   size="xs"
                   customLabel="Modello PUMS"
+                  metricId="pisa_pums_deliberation"
                   onClick={() => onInspectMetric && onInspectMetric('pisa_pums_deliberation')}
                 />
               </div>
@@ -195,6 +209,7 @@ export default function ExecutiveView({
                   status="REAL_CALCULATED"
                   size="xs"
                   customLabel="ISPRA / ACI"
+                  metricId="co2_factors_ispra"
                   onClick={() => onInspectMetric && onInspectMetric('co2_factors_ispra')}
                 />
               </div>
@@ -220,6 +235,7 @@ export default function ExecutiveView({
                   status="VIRTUAL_PUMS"
                   size="xs"
                   customLabel="Modello PUMS"
+                  metricId="peba_bus_stops"
                   onClick={() => onInspectMetric && onInspectMetric('peba_bus_stops')}
                 />
               </div>
@@ -245,6 +261,7 @@ export default function ExecutiveView({
                   status="VIRTUAL_PUMS"
                   size="xs"
                   customLabel="Modello PUMS"
+                  metricId="bike_counters_inductive_loops"
                   onClick={() => onInspectMetric && onInspectMetric('bike_counters_inductive_loops')}
                 />
               </div>
@@ -401,6 +418,7 @@ export default function ExecutiveView({
                 <DataSourceBadge
                   status="REAL_CALCULATED"
                   size="xs"
+                  metricId="co2_factors_ispra"
                   onClick={() => onInspectMetric && onInspectMetric('co2_factors_ispra')}
                 />
               </div>

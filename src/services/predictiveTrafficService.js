@@ -19,7 +19,7 @@ export const WEATHER_SCENARIOS = {
     wind: 8,
     isRainy: false,
     icon: 'Sun',
-    description: 'Condizioni ottimali: massima ciclabilità e traffico veicolare ridotto'
+    description: 'Condizioni ottimali: massima ciclabilità (+18%) e traffico auto ridotto (-8.5%)'
   },
   rain_moderate: {
     id: 'rain_moderate',
@@ -29,7 +29,7 @@ export const WEATHER_SCENARIOS = {
     wind: 18,
     isRainy: true,
     icon: 'CloudRain',
-    description: 'Trasferimento modale verso auto privata e saturazione bus LAM'
+    description: 'Trasferimento modale: auto +28%, quota bici -35%, saturazione bus LAM all\'89%'
   },
   rain_heavy: {
     id: 'rain_heavy',
@@ -39,7 +39,7 @@ export const WEATHER_SCENARIOS = {
     wind: 38,
     isRainy: true,
     icon: 'CloudLightning',
-    description: 'Forte congestione Lungarni e ritardi TPL urbano'
+    description: 'Forte congestione Lungarni: auto +42.5%, quota bici -58%, saturazione bus al 96%'
   }
 };
 

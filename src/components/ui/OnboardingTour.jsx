@@ -46,9 +46,9 @@ export const TOUR_STEPS = [
     tab: 'executive',
     subTab: 'simulator',
     targetId: 'tour-predictive-traffic',
-    title: '3. Simulatore Predittivo AI Meteo-Traffico',
-    subtitle: 'AI Smart City Engine per i Lungarni',
-    description: 'Simula in tempo reale come il meteo di Pisa impatta la viabilità: seleziona "Pioggia Moderata" o "Maltempo" per stimare l\'aumento di auto sui Lungarni (+28% / +42%), la saturazione dei bus LAM e i consigli orari per i cittadini.',
+    title: '3. Simulatore Predittivo Meteo-Traffico (Modello PUMS)',
+    subtitle: 'Modello Statistico PUMS per i Lungarni',
+    description: 'Simula in tempo reale come il meteo di Pisa impatta la viabilità: seleziona "Pioggia Moderata" (+28% auto) o "Maltempo" (+42.5% auto) per stimare il trasferimento modale, la saturazione dei bus LAM e i consigli orari per i cittadini.',
     icon: Cpu,
     badgeColor: 'text-purple-400 bg-purple-950 border-purple-800'
   },

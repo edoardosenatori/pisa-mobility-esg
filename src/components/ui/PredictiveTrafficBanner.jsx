@@ -41,11 +41,12 @@ export default function PredictiveTrafficBanner({ liveWeather, citizenGuide = fa
         <div>
           <div className="flex items-center gap-2 flex-wrap">
             <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 flex items-center gap-1.5 shadow-sm">
-              <Cpu className="w-3.5 h-3.5 text-purple-400" /> AI Predictive Traffic Engine
+              <Cpu className="w-3.5 h-3.5 text-purple-400" /> Simulatore Predittivo Meteo-Traffico (Modello PUMS)
             </span>
             <DataSourceBadge
               status="REAL_CALCULATED"
               customLabel="Modello O/D PUMS & Open-Meteo"
+              metricId="pisa_pums_deliberation"
               onClick={() => window.open('https://pumspisa.tages.it/', '_blank')}
             />
             <InfoTooltip term="Modal Split" showCitizenBadge={citizenGuide} />
@@ -54,7 +55,7 @@ export default function PredictiveTrafficBanner({ liveWeather, citizenGuide = fa
             <span>Previsione Impatto Meteo sul Traffico Urbano</span>
           </h3>
           <p className="text-xs text-slate-300 mt-0.5">
-            Stima in tempo reale del trasferimento modale verso auto o bici in base alle precipitazioni e alle condizioni atmosferiche.
+            Stima in tempo reale del trasferimento modale verso auto o bici in base alle precipitazioni e alle condizioni atmosferiche (PUMS Pisa).
           </p>
         </div>
 
@@ -157,11 +158,11 @@ export default function PredictiveTrafficBanner({ liveWeather, citizenGuide = fa
 
       </div>
 
-      {/* Citizen AI Mobility Tip */}
+      {/* Citizen PUMS Mobility Tip */}
       <div className="p-3 rounded-xl bg-purple-950/60 border border-purple-500/30 text-xs text-purple-200 flex items-start gap-2.5">
         <Sparkles className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
         <div className="space-y-0.5">
-          <strong className="font-bold text-white">Raccomandazione AI Smart City:</strong>
+          <strong className="font-bold text-white">Raccomandazione Mobilità (Modello PUMS):</strong>
           <p className="text-purple-200/90">{impact.citizenTip}</p>
         </div>
       </div>

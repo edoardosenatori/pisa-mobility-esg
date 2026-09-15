@@ -32,10 +32,10 @@ export default function ExecutiveReportModal({ isOpen, onClose, liveAirQuality, 
   });
 
   return (
-    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-2 sm:p-4 bg-slate-950/85 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-2 sm:p-4 bg-slate-950/85 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200 print:static print:inset-auto print:bg-white print:p-0 print:m-0 print:overflow-visible print:z-auto">
       
       {/* Container Dialog */}
-      <div className="relative w-full max-w-4xl bg-slate-900 border border-slate-700 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
+      <div className="relative w-full max-w-4xl bg-slate-900 border border-slate-700 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh] print:border-none print:shadow-none print:max-h-none print:w-full print:bg-white print:rounded-none">
         
         {/* Modal Action Header (Hidden in Print) */}
         <div className="p-4 bg-slate-800/90 border-b border-slate-700 flex items-center justify-between gap-3 shrink-0 print:hidden">
@@ -69,10 +69,10 @@ export default function ExecutiveReportModal({ isOpen, onClose, liveAirQuality, 
           </div>
         </div>
 
-        {/* Printable Document Body (A4 Styled) */}
-        <div className="flex-1 overflow-y-auto p-6 sm:p-10 bg-slate-950 print:bg-white print:text-black print:p-0 print:m-0">
+        {/* Printable Document Body (A4 Styled Eco-Friendly) */}
+        <div className="flex-1 overflow-y-auto p-6 sm:p-10 bg-slate-950 print:bg-white print:text-slate-900 print:p-0 print:m-0">
           
-          <div ref={printAreaRef} className="max-w-3xl mx-auto space-y-6 text-slate-100 print:text-black">
+          <div ref={printAreaRef} className="max-w-3xl mx-auto space-y-6 text-slate-100 print:text-slate-900 print:bg-white">
             
             {/* 1. Institutional Document Header */}
             <div className="flex items-start justify-between pb-5 border-b-2 border-red-600 print:border-red-700">
@@ -128,7 +128,7 @@ export default function ExecutiveReportModal({ isOpen, onClose, liveAirQuality, 
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {Object.values(ESG_DIMENSIONS).map((dim) => (
-                  <div key={dim.id} className="p-3 rounded-xl bg-slate-900 print:bg-slate-100 border border-slate-800 print:border-slate-300">
+                  <div key={dim.id} className="p-3 rounded-xl bg-slate-900 print:bg-slate-50 border border-slate-800 print:border-slate-300">
                     <div className="flex items-center justify-between text-[10px] text-slate-400 print:text-slate-600">
                       <span className="font-bold">{dim.code}</span>
                       <span className="text-emerald-400 print:text-emerald-700 font-bold">● {dim.semaphore.label}</span>
@@ -147,27 +147,35 @@ export default function ExecutiveReportModal({ isOpen, onClose, liveAirQuality, 
               </div>
             </div>
 
-            {/* 3. Dati Ambientali Live & Aria */}
-            <div className="p-4 rounded-xl bg-slate-900 print:bg-slate-100 border border-slate-800 print:border-slate-300 space-y-2">
+            {/* 3. Dati Ambientali Live & Aria (Open-Meteo & Copernicus) */}
+            <div className="p-4 rounded-xl bg-slate-900 print:bg-slate-50 border border-slate-800 print:border-slate-300 space-y-2">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-white print:text-black flex items-center gap-1.5">
                   <Leaf className="w-4 h-4 text-emerald-400 print:text-emerald-700" />
-                  <span>2. Rilevazione Qualità dell'Aria a Pisa (Open-Meteo & Copernicus)</span>
+                  <span>2. Rilevazione Qualità dell'Aria a Pisa (Open-Meteo & Copernicus CAMS)</span>
                 </h3>
-                <span className="text-[10px] font-mono text-slate-400 print:text-slate-600">Coordinate: 43.7167 N, 10.4000 E</span>
+                <span className="text-[10px] font-mono text-slate-400 print:text-slate-600">
+                  {liveAirQuality?.lastSuccessTime ? `Aggiornato: ${liveAirQuality.lastSuccessTime}` : 'Stazione Pisa (43.7167 N, 10.4000 E)'}
+                </span>
               </div>
               <div className="grid grid-cols-3 gap-3 text-xs">
                 <div>
                   <span className="text-slate-400 print:text-slate-600 text-[11px]">PM10 Attuale:</span>
-                  <p className="font-bold text-white print:text-black">{liveAirQuality?.pm10 ?? '18.2'} µg/m³ (Limite UE: 50)</p>
+                  <p className="font-bold text-white print:text-black">
+                    {liveAirQuality?.pm10 != null ? `${liveAirQuality.pm10} µg/m³` : 'n/d'} (Limite UE: 50)
+                  </p>
                 </div>
                 <div>
                   <span className="text-slate-400 print:text-slate-600 text-[11px]">PM2.5:</span>
-                  <p className="font-bold text-white print:text-black">{liveAirQuality?.pm25 ?? '10.5'} µg/m³ (Limite UE: 25)</p>
+                  <p className="font-bold text-white print:text-black">
+                    {liveAirQuality?.pm2_5 != null ? `${liveAirQuality.pm2_5} µg/m³` : 'n/d'} (Limite UE: 25)
+                  </p>
                 </div>
                 <div>
                   <span className="text-slate-400 print:text-slate-600 text-[11px]">Indice Qualità:</span>
-                  <p className="font-bold text-emerald-400 print:text-emerald-700">{liveAirQuality?.aqiLabel ?? 'Buona (Fascia Verde)'}</p>
+                  <p className="font-bold text-emerald-400 print:text-emerald-700">
+                    {liveAirQuality?.aqiLabel ?? 'In Rilevamento'}
+                  </p>
                 </div>
               </div>
             </div>

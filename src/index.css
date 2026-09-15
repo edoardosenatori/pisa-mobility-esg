@@ -90,3 +90,37 @@
   border: 1px solid rgba(59, 130, 246, 0.4);
   box-shadow: 0 0 15px rgba(59, 130, 246, 0.15);
 }
+
+/* Institutional Eco-Print Styles (A4) */
+@media print {
+  @page {
+    margin: 1.2cm;
+    size: A4 portrait;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    background-image: none !important;
+    font-size: 11pt;
+  }
+
+  /* Hide interactive/chrome elements during print */
+  header,
+  nav,
+  footer,
+  #tour-spotlight-mask,
+  #mobile-executive-segments,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Reset layout constraints for print */
+  #root, main {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: none !important;
+  }
+}
+

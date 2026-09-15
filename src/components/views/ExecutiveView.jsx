@@ -89,16 +89,16 @@ export default function ExecutiveView({
   const surplusPercentage = ((surplusCo2 / totalTargetPums) * 100).toFixed(1);
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-300">
+    <div className="space-y-6 animate-in fade-in duration-300">
       
-      {/* 1. HERO SECTION DINAMICA GLASSMORPHISM (COMPATTA MOBILE HUD) */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/90 to-blue-950/60 p-4 sm:p-8 border border-slate-700/70 shadow-2xl backdrop-blur-2xl">
+      {/* 1. HERO SECTION DINAMICA GLASSMORPHISM (COMPATTA DESKTOP & MOBILE HUD) */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/90 to-blue-950/60 p-4 sm:py-5 sm:px-7 border border-slate-700/70 shadow-2xl backdrop-blur-2xl">
         {/* Subtle Ambient Glow */}
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-blue-600/15 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-emerald-600/15 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5 sm:gap-6">
-          <div className="space-y-3 max-w-3xl w-full">
+        <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 sm:gap-6">
+          <div className="space-y-2.5 max-w-3xl w-full">
             <div className="flex items-center gap-2 flex-wrap">
               <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1.5 shadow-sm">
                 <Sparkles className="w-3.5 h-3.5 text-emerald-400" /> PUMS Pisa 2020-2030 • Control Room
@@ -111,12 +111,12 @@ export default function ExecutiveView({
               />
             </div>
 
-            <h1 className="text-xl sm:text-4xl font-black text-white tracking-tight leading-tight">
+            <h1 className="text-xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight leading-tight">
               Pisa Mobility & ESG Dashboard
             </h1>
 
-            <p className="text-xs sm:text-base text-slate-300 leading-relaxed font-normal">
-              Monitoraggio in tempo reale di traffico dolce, accessibilità e aria pulita sull'Asse Pilota.
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
+              Monitoraggio in tempo reale di decarbonizzazione, accessibilità PEBA e mobilità ciclabile sull'Asse Pilota.
             </p>
 
             {/* Mobile Compact ESG Index Bar */}
@@ -135,11 +135,11 @@ export default function ExecutiveView({
             </div>
 
             {/* CTAs */}
-            <div className="flex flex-wrap items-center gap-2.5 pt-1">
+            <div className="flex flex-wrap items-center gap-2.5 pt-0.5">
               <button
                 type="button"
                 onClick={() => onStartTour && onStartTour()}
-                className="flex items-center gap-1.5 px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-lg shadow-emerald-950/50 border border-emerald-400/40 transition cursor-pointer"
+                className="flex items-center gap-1.5 px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-lg shadow-emerald-950/50 border border-emerald-400/40 transition cursor-pointer"
               >
                 <Play className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-white" />
                 <span>Tour Guidato</span>
@@ -148,7 +148,7 @@ export default function ExecutiveView({
               <button
                 type="button"
                 onClick={() => onOpenReportModal && onOpenReportModal()}
-                className="flex items-center gap-1.5 px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-lg shadow-blue-950/50 border border-blue-400/40 transition cursor-pointer"
+                className="flex items-center gap-1.5 px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-lg shadow-blue-950/50 border border-blue-400/40 transition cursor-pointer"
               >
                 <FileText className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 <span>Report A4 Giunta</span>
@@ -157,7 +157,7 @@ export default function ExecutiveView({
               <button
                 type="button"
                 onClick={onNavigateToMap}
-                className="flex items-center gap-1.5 px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-slate-800/90 hover:bg-slate-700/90 text-slate-200 hover:text-white border border-slate-600/70 transition cursor-pointer"
+                className="flex items-center gap-1.5 px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-800/90 hover:bg-slate-700/90 text-slate-200 hover:text-white border border-slate-600/70 transition cursor-pointer"
               >
                 <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-400" />
                 <span>Mappa Asse</span>
@@ -166,7 +166,7 @@ export default function ExecutiveView({
           </div>
 
           {/* Quick Header Widget (Desktop) */}
-          <div className="hidden xl:flex flex-col gap-2.5 bg-slate-950/80 p-4 rounded-2xl border border-slate-800 text-xs min-w-[240px]">
+          <div className="hidden xl:flex flex-col gap-2 bg-slate-950/80 p-4 rounded-2xl border border-slate-800 text-xs min-w-[240px]">
             <div className="flex items-center justify-between text-slate-400 font-medium">
               <span>Indice Sintetico ESG:</span>
               <div className="flex items-center gap-1.5">
@@ -190,7 +190,7 @@ export default function ExecutiveView({
         </div>
 
         {/* 3 ANIMATED QUICK NUMBERS BADGES: HORIZONTAL SNAP CAROUSEL ON MOBILE, 3-COL GRID ON SM+ */}
-        <div className="relative mt-5 sm:mt-6 pt-5 sm:pt-6 border-t border-slate-800/80">
+        <div className="relative mt-4 sm:mt-5 pt-4 sm:pt-5 border-t border-slate-800/80">
           <div 
             className="flex sm:grid sm:grid-cols-3 gap-3.5 overflow-x-auto snap-x snap-mandatory no-scrollbar pb-1"
             onScroll={(e) => {
@@ -201,8 +201,8 @@ export default function ExecutiveView({
             }}
           >
             {/* Quick Number 1: CO2 Risparmiata */}
-            <div className="min-w-[80vw] sm:min-w-0 snap-center shrink-0 sm:shrink p-3.5 rounded-2xl bg-slate-950/60 border border-emerald-500/30 flex items-center justify-between gap-3 backdrop-blur-md">
-              <div className="flex items-center gap-3.5">
+            <div className="min-w-[80vw] sm:min-w-0 snap-center shrink-0 sm:shrink p-3 rounded-2xl bg-slate-950/60 border border-emerald-500/30 flex items-center justify-between gap-3 backdrop-blur-md">
+              <div className="flex items-center gap-3">
                 <div className="p-2.5 rounded-xl bg-emerald-950/80 text-emerald-400 border border-emerald-800/60 shrink-0">
                   <TreePine className="w-5 h-5" />
                 </div>
@@ -227,8 +227,8 @@ export default function ExecutiveView({
             </div>
 
             {/* Quick Number 2: Fermate Accessibili */}
-            <div className="min-w-[80vw] sm:min-w-0 snap-center shrink-0 sm:shrink p-3.5 rounded-2xl bg-slate-950/60 border border-blue-500/30 flex items-center justify-between gap-3 backdrop-blur-md">
-              <div className="flex items-center gap-3.5">
+            <div className="min-w-[80vw] sm:min-w-0 snap-center shrink-0 sm:shrink p-3 rounded-2xl bg-slate-950/60 border border-blue-500/30 flex items-center justify-between gap-3 backdrop-blur-md">
+              <div className="flex items-center gap-3">
                 <div className="p-2.5 rounded-xl bg-blue-950/80 text-blue-400 border border-blue-800/60 shrink-0">
                   <Accessibility className="w-5 h-5" />
                 </div>
@@ -253,8 +253,8 @@ export default function ExecutiveView({
             </div>
 
             {/* Quick Number 3: Bici Transitano Oggi */}
-            <div className="min-w-[80vw] sm:min-w-0 snap-center shrink-0 sm:shrink p-3.5 rounded-2xl bg-slate-950/60 border border-purple-500/30 flex items-center justify-between gap-3 backdrop-blur-md">
-              <div className="flex items-center gap-3.5">
+            <div className="min-w-[80vw] sm:min-w-0 snap-center shrink-0 sm:shrink p-3 rounded-2xl bg-slate-950/60 border border-purple-500/30 flex items-center justify-between gap-3 backdrop-blur-md">
+              <div className="flex items-center gap-3">
                 <div className="p-2.5 rounded-xl bg-purple-950/80 text-purple-400 border border-purple-800/60 shrink-0">
                   <Bike className="w-5 h-5" />
                 </div>
@@ -336,15 +336,7 @@ export default function ExecutiveView({
         </button>
       </div>
 
-      {/* 2. PREDICTIVE TRAFFIC & WEATHER SIMULATOR BANNER */}
-      <div className={mobileTab === 'simulator' ? 'block animate-in fade-in duration-200' : 'hidden lg:block'}>
-        <PredictiveTrafficBanner 
-          liveWeather={liveWeather} 
-          citizenGuide={citizenGuide} 
-        />
-      </div>
-
-      {/* SECTION 1: 4 ESG CARDS (WITH CITIZEN SUBTITLES AND TOOLTIPS) */}
+      {/* SECTION 1: 4 ESG CARDS (IMMEDIATELY ABOVE-THE-FOLD ON DESKTOP) */}
       <div id="tour-esg-cards" className={mobileTab === 'esg' ? 'block animate-in fade-in duration-200' : 'hidden lg:block'}>
         <div className="flex items-center justify-between mb-3.5 flex-wrap gap-2">
           <div>
@@ -411,6 +403,14 @@ export default function ExecutiveView({
             />
           ))}
         </div>
+      </div>
+
+      {/* SECTION 2: PREDICTIVE TRAFFIC & WEATHER SIMULATOR BANNER */}
+      <div className={mobileTab === 'simulator' ? 'block animate-in fade-in duration-200' : 'hidden lg:block'}>
+        <PredictiveTrafficBanner 
+          liveWeather={liveWeather} 
+          citizenGuide={citizenGuide} 
+        />
       </div>
 
       {/* SECTION 2: 12-MONTH HISTORICAL CHART & MUNICIPAL TARGETS */}

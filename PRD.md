@@ -89,10 +89,10 @@ Dall'audit tecnico condotto sui file di revisione (`cose_da_sistemare_pm_esg (2)
 - [x] **A.5 Disclaimer Form Segnalazioni PEBA**: In `OpenDataView.jsx`, anteporre `DEMO-` al numero di protocollo generato e mostrare il disclaimer: *"Memorizzato a fini dimostrativi su questo dispositivo — Non costituisce protocollo ufficiale del Comune di Pisa"*.
 
 ### 🟡 SPRINT B — Priorità P1 (Rifinitura Grafica & Coerenza)
-- [ ] **B.1 Riorganizzazione Gerarchica Executive**: Assicurare che le 4 Card ESG siano immediatamente visibili above-the-fold dopo l'apertura della pagina.
-- [ ] **B.2 Ridenominazione Simulatore**: Rinominare "AI Predictive Traffic Engine" in *"Simulatore Predittivo Meteo-Traffico (Modello PUMS)"* sia nel banner che nei tooltip.
-- [ ] **B.3 Verifica Stampa Report A4**: Controllare che l'`ExecutiveReportModal` utilizzi un tema chiaro (`bg-white text-slate-900`) in modalità di stampa per evitare spreco di inchiostro e leggibilità compromessa.
-- [ ] **B.4 Riconciliazione Indicatori e Scenari**: Verificare che le percentuali del simulatore (Sole, Pioggia, Allerta) corrispondano esattamente tra interfaccia grafica, service e testi d'aiuto.
+- [x] **B.1 Riorganizzazione Gerarchica Executive**: Assicurare che le 4 Card ESG siano immediatamente visibili above-the-fold dopo l'apertura della pagina.
+- [x] **B.2 Ridenominazione Simulatore**: Rinominare "AI Predictive Traffic Engine" in *"Simulatore Predittivo Meteo-Traffico (Modello PUMS)"* sia nel banner che nei tooltip.
+- [x] **B.3 Verifica Stampa Report A4**: Controllare che l'`ExecutiveReportModal` utilizzi un tema chiaro (`bg-white text-slate-900`) in modalità di stampa per evitare spreco di inchiostro e leggibilità compromessa.
+- [x] **B.4 Riconciliazione Indicatori e Scenari**: Verificare che le percentuali del simulatore (Sole, Pioggia, Allerta) corrispondano esattamente tra interfaccia grafica, service e testi d'aiuto.
 
 ### 🟢 SPRINT C — Priorità P2 (Mappa, Open Data & Accessibilità)
 - [ ] **C.1 Mappa Territoriale**: Legenda fissa ben visibile, toggle ON/OFF con contrasto netto, corretta attribuzione licenze OpenStreetMap / Carto / Esri.

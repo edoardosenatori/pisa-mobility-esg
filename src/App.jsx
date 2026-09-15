@@ -77,6 +77,12 @@ export default function App() {
     }
   }, [toast]);
 
+  // Sincronizzazione visiva: al cambio sezione, posiziona subito la visuale
+  // sulla parte clou in cima, evitando di ereditare lo scroll della vista precedente
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [activeTab]);
+
   const handleRefresh = async () => {
     setIsRefreshing(true);
     try {

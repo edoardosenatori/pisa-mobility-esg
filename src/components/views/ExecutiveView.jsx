@@ -72,6 +72,17 @@ export default function ExecutiveView({
     return () => window.removeEventListener('pm-esg-tour-step', handleTourStep);
   }, []);
 
+  const handleSelectMobileTab = (tab) => {
+    setMobileTab(tab);
+    const el = document.getElementById('mobile-executive-segments');
+    if (el) {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < 60) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  };
+
   const totalCo2Evitata = HISTORICAL_CO2_SERIES.reduce((acc, curr) => acc + curr.co2Evitata, 0);
   const totalTargetPums = HISTORICAL_CO2_SERIES.reduce((acc, curr) => acc + curr.targetPUMS, 0);
   const surplusCo2 = totalCo2Evitata - totalTargetPums;
@@ -284,10 +295,10 @@ export default function ExecutiveView({
       </div>
 
       {/* MOBILE SEGMENTED PILLS CONTROL (STICKY ANTI-SCROLL) */}
-      <div className="lg:hidden sticky top-14 z-30 -mx-4 px-4 py-2.5 bg-slate-950/95 backdrop-blur-2xl border-y border-slate-800 shadow-xl flex items-center gap-2 overflow-x-auto no-scrollbar">
+      <div id="mobile-executive-segments" className="lg:hidden sticky top-14 z-30 -mx-4 px-4 py-2.5 bg-slate-950/95 backdrop-blur-2xl border-y border-slate-800 shadow-xl flex items-center gap-2 overflow-x-auto no-scrollbar">
         <button
           type="button"
-          onClick={() => setMobileTab('esg')}
+          onClick={() => handleSelectMobileTab('esg')}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition cursor-pointer ${
             mobileTab === 'esg'
               ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-950/50 border border-blue-400/40'
@@ -300,7 +311,7 @@ export default function ExecutiveView({
 
         <button
           type="button"
-          onClick={() => setMobileTab('simulator')}
+          onClick={() => handleSelectMobileTab('simulator')}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition cursor-pointer ${
             mobileTab === 'simulator'
               ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-lg shadow-amber-950/50 border border-amber-400/40'
@@ -313,7 +324,7 @@ export default function ExecutiveView({
 
         <button
           type="button"
-          onClick={() => setMobileTab('targets')}
+          onClick={() => handleSelectMobileTab('targets')}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition cursor-pointer ${
             mobileTab === 'targets'
               ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-950/50 border border-emerald-400/40'

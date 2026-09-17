@@ -190,9 +190,9 @@ export default function ExecutiveView({
         </div>
 
         {/* 3 ANIMATED QUICK NUMBERS BADGES: HORIZONTAL SNAP CAROUSEL ON MOBILE, 3-COL GRID ON SM+ */}
-        <div className="relative mt-4 sm:mt-5 pt-4 sm:pt-5 border-t border-slate-800/80">
+        <div className="relative mt-4 sm:mt-5 pt-4 sm:pt-5 border-t border-slate-800/80 w-full max-w-full overflow-hidden">
           <div 
-            className="flex sm:grid sm:grid-cols-3 gap-3.5 overflow-x-auto snap-x snap-mandatory no-scrollbar pb-1"
+            className="flex sm:grid sm:grid-cols-3 gap-3.5 overflow-x-auto snap-x snap-mandatory no-scrollbar pb-1 w-full max-w-full"
             onScroll={(e) => {
               const scrollLeft = e.currentTarget.scrollLeft;
               const width = e.currentTarget.offsetWidth;
@@ -295,7 +295,7 @@ export default function ExecutiveView({
       </div>
 
       {/* MOBILE SEGMENTED PILLS CONTROL (STICKY ANTI-SCROLL) */}
-      <div id="mobile-executive-segments" className="lg:hidden sticky top-14 z-30 -mx-4 px-4 py-2.5 bg-slate-950/95 backdrop-blur-2xl border-y border-slate-800 shadow-xl flex items-center gap-2 overflow-x-auto no-scrollbar">
+      <div id="mobile-executive-segments" className="lg:hidden sticky top-14 z-30 w-full max-w-full py-2 bg-slate-950/95 backdrop-blur-2xl border-y border-slate-800 shadow-xl flex items-center gap-2 overflow-x-auto no-scrollbar">
         <button
           type="button"
           onClick={() => handleSelectMobileTab('esg')}
@@ -337,12 +337,12 @@ export default function ExecutiveView({
       </div>
 
       {/* SECTION 1: 4 ESG CARDS (IMMEDIATELY ABOVE-THE-FOLD ON DESKTOP) */}
-      <div id="tour-esg-cards" className={mobileTab === 'esg' ? 'block animate-in fade-in duration-200' : 'hidden lg:block'}>
+      <div id="tour-esg-cards" className={mobileTab === 'esg' ? 'block animate-in fade-in duration-200 w-full max-w-full overflow-hidden' : 'hidden lg:block w-full max-w-full'}>
         <div className="flex items-center justify-between mb-3.5 flex-wrap gap-2">
           <div>
             <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-              <Layers className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" />
-              <span>Le 4 Dimensioni ESG (Environmental, Social, Economic, Governance)</span>
+              <Layers className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400 shrink-0" />
+              <span className="leading-tight">Le 4 Dimensioni ESG (Environmental, Social, Economic, Governance)</span>
             </h3>
             <p className="text-xs text-slate-400">
               Clicca sui badge per ispezionare l'origine dei dati e tocca l'icona (?) per la spiegazione accessibile
@@ -356,7 +356,7 @@ export default function ExecutiveView({
         </div>
 
         {/* Mobile 4-Quadrants Pill Switcher */}
-        <div className="lg:hidden flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-2.5 mb-2">
+        <div className="lg:hidden flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-2.5 mb-2 w-full max-w-full">
           {Object.values(ESG_DIMENSIONS).map((dim) => {
             const isSel = selectedDimension === dim.id;
             return (

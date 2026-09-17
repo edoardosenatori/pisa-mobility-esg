@@ -84,17 +84,17 @@ export default function Header({
   ];
 
   return (
-    <header className="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-xl border-b border-slate-800 shadow-2xl">
+    <header className="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-xl border-b border-slate-800 shadow-2xl w-full max-w-full overflow-hidden">
       {/* Top Banner: Institutional Branding & Realtime status */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row items-center justify-between py-3 gap-3 border-b border-slate-800/60">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 w-full">
+        <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between py-2.5 sm:py-3 gap-2.5 sm:gap-3 border-b border-slate-800/60 w-full min-w-0">
           
           {/* Logo & Institutional Title */}
-          <div className="flex items-center gap-3.5 w-full lg:w-auto justify-between lg:justify-start">
-            <div className="flex items-center gap-3.5">
+          <div className="flex items-center gap-2.5 sm:gap-3.5 w-full lg:w-auto justify-between lg:justify-start min-w-0">
+            <div className="flex items-center gap-2.5 sm:gap-3.5 min-w-0 flex-1">
               {/* Pisa Institutional Crest */}
-              <div className="relative flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-br from-red-600 to-pisa-red border border-red-400/40 shadow-[0_0_20px_rgba(196,18,48,0.45)] shrink-0">
-                <svg className="w-7 h-7 text-white" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="7" strokeLinecap="square">
+              <div className="relative flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-red-600 to-pisa-red border border-red-400/40 shadow-[0_0_20px_rgba(196,18,48,0.45)] shrink-0">
+                <svg className="w-6 h-6 sm:w-7 sm:h-7 text-white" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="7" strokeLinecap="square">
                   <path d="M50 12 L50 88 M12 50 L88 50" />
                   <path d="M30 30 L38 38 M70 30 L62 38 M30 70 L38 62 M70 70 L62 62" strokeWidth="5" />
                   <circle cx="50" cy="12" r="4" fill="currentColor" />
@@ -102,56 +102,56 @@ export default function Header({
                   <circle cx="12" cy="50" r="4" fill="currentColor" />
                   <circle cx="88" cy="50" r="4" fill="currentColor" />
                 </svg>
-                <span className="absolute -bottom-1 -right-1 flex h-3 w-3">
+                <span className="absolute -bottom-1 -right-1 flex h-2.5 w-2.5 sm:h-3 sm:w-3">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 sm:h-3 sm:w-3 bg-emerald-500"></span>
                 </span>
               </div>
 
-              <div>
+              <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
-                  <h1 className="text-base sm:text-lg font-black text-white tracking-tight flex items-center gap-2">
-                    <span className="whitespace-nowrap">Pisa Mobility & ESG Dashboard</span>
+                  <h1 className="text-sm sm:text-lg font-black text-white tracking-tight leading-tight truncate">
+                    Pisa Mobility & ESG
                   </h1>
                 </div>
-                <p className="text-xs text-slate-400 flex items-center gap-2">
-                  <span className="text-slate-300 font-semibold whitespace-nowrap">Comune di Pisa</span>
+                <p className="text-[10px] sm:text-xs text-slate-400 flex items-center gap-1.5 truncate">
+                  <span className="text-slate-300 font-semibold truncate">Comune di Pisa</span>
                   <span>•</span>
-                  <span className="whitespace-nowrap">PUMS 2020-2030</span>
+                  <span className="shrink-0">PUMS</span>
                 </p>
               </div>
             </div>
 
             {/* Mobile quick action buttons */}
-            <div className="flex items-center gap-2 lg:hidden">
+            <div className="flex items-center gap-1.5 shrink-0 lg:hidden">
               <button
                 type="button"
                 onClick={onStartTour}
-                className="p-2 rounded-xl bg-emerald-950/80 text-emerald-300 border border-emerald-500 flex items-center gap-1 text-xs font-semibold"
+                className="px-2 py-1.5 rounded-xl bg-emerald-950/80 text-emerald-300 border border-emerald-500 flex items-center gap-1 text-xs font-semibold cursor-pointer"
                 title="Tour Guidato"
               >
-                <HelpCircle className="w-4 h-4 text-emerald-400" />
-                <span>Tour</span>
+                <HelpCircle className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                <span className="text-[11px]">Tour</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setCitizenGuide(!citizenGuide)}
-                className={`p-2 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition ${
+                className={`px-2 py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-1 transition cursor-pointer ${
                   citizenGuide 
                     ? 'bg-emerald-950/80 text-emerald-300 border-emerald-500 shadow-lg shadow-emerald-950/50' 
                     : 'bg-slate-800/80 text-slate-400 border-slate-700'
                 }`}
                 title="Attiva/Disattiva Guida Cittadino"
               >
-                <Sparkles className={`w-4 h-4 ${citizenGuide ? 'text-emerald-400' : 'text-slate-500'}`} />
-                <span className="text-[11px] font-bold">{citizenGuide ? 'Guida ON' : 'Tecnico'}</span>
+                <Sparkles className={`w-3.5 h-3.5 shrink-0 ${citizenGuide ? 'text-emerald-400' : 'text-slate-500'}`} />
+                <span className="text-[11px] font-bold">{citizenGuide ? 'Guida' : 'Tecnico'}</span>
               </button>
             </div>
           </div>
 
           {/* Center / Right: Mode Switch Toggle + Tour Trigger + Live Badges */}
-          <div id="tour-header-controls" className="flex items-center gap-2.5 flex-wrap justify-between lg:justify-end w-full lg:w-auto">
+          <div id="tour-header-controls" className="flex items-center gap-2 flex-wrap justify-between lg:justify-end w-full lg:w-auto min-w-0">
             
             {/* 1. PROGRESSIVE DISCLOSURE SWITCH: Guida alla Lettura (Cittadini) */}
             <div className="hidden sm:flex items-center gap-2.5 bg-slate-950/90 px-3 py-1.5 rounded-xl border border-slate-800 shadow-inner">
@@ -261,7 +261,7 @@ export default function Header({
         </div>
 
         {/* Navigation Tabs (4 main views) */}
-        <nav className="flex items-center gap-1 sm:gap-2 py-2 overflow-x-auto no-scrollbar" aria-label="Navigazione viste principali">
+        <nav className="flex items-center gap-1 sm:gap-2 py-2 overflow-x-auto no-scrollbar w-full max-w-full min-w-0" aria-label="Navigazione viste principali">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;

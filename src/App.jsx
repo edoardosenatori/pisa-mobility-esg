@@ -126,7 +126,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 font-sans selection:bg-emerald-500 selection:text-white">
+    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 font-sans selection:bg-emerald-500 selection:text-white overflow-x-hidden max-w-full w-full">
       
       {/* Institutional Navigation Header with Mode Switch & Tour Trigger */}
       <Header 
@@ -143,7 +143,7 @@ export default function App() {
       />
 
       {/* Main Viewport Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 pb-24 lg:pb-8">
+      <main className="flex-1 max-w-7xl w-full min-w-0 mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 pb-24 lg:pb-8 overflow-x-hidden">
         {activeTab === 'executive' && (
           <ExecutiveView 
             onNavigateToMap={() => setActiveTab('map')}
@@ -208,8 +208,10 @@ export default function App() {
       {/* Institutional Toast Notifications */}
       <Toast toast={toast} onClose={() => setToast(null)} />
 
-      {/* Mobile Bottom Navigation Bar (Thumb Zone) */}
-      <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
+      {/* Mobile Bottom Navigation Bar (Thumb Zone) - Hidden during Onboarding Tour to prevent visual collision */}
+      {!isTourOpen && (
+        <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
+      )}
 
       {/* Institutional Footer */}
       <Footer />

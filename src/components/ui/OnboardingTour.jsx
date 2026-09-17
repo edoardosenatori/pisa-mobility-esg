@@ -143,14 +143,32 @@ export default function OnboardingTour({
         }
 
         if (shouldScroll) {
-          targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          const isMobile = window.innerWidth < 768;
+          if (isMobile) {
+            // On mobile, align near top with clearance for sticky header so target isn't covered by bottom dialog
+            const headerOffset = 75;
+            const elementPosition = rect.top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+            window.scrollTo({
+              top: Math.max(0, offsetPosition),
+              behavior: 'smooth'
+            });
+          } else {
+            targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
         }
 
+        const screenW = Math.min(window.innerWidth || 390, document.documentElement?.clientWidth || 390);
+        const leftPadding = 8;
+        const adjustedLeft = Math.max(leftPadding, rect.left - 4);
+        const maxWidthAllowed = Math.max(40, screenW - adjustedLeft - leftPadding);
+        const adjustedWidth = Math.min(maxWidthAllowed, rect.width + 8);
+
         setHighlightRect({
-          top: Math.max(10, rect.top - 8),
-          left: Math.max(10, rect.left - 8),
-          width: rect.width + 16,
-          height: rect.height + 16,
+          top: Math.max(8, rect.top - 4),
+          left: adjustedLeft,
+          width: adjustedWidth,
+          height: rect.height + 8,
         });
       } else {
         setHighlightRect(null);
@@ -207,7 +225,7 @@ export default function OnboardingTour({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[100000] pointer-events-none animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[100000] pointer-events-none animate-in fade-in duration-200 overflow-hidden max-w-[100vw]">
       
       {/* 1. CUTOUT SVG SPOTLIGHT MASK (ZERO BLUR, UNLOCKED SCROLL FOR USER) */}
       <svg 
@@ -260,49 +278,50 @@ export default function OnboardingTour({
         />
       )}
 
-      {/* 3. FLOATING TOUR DIALOG CARD (DOCKED BOTTOM/CENTER) */}
+      {/* 3. FLOATING TOUR DIALOG CARD (RESPONSIVE DOCKED WITH SAFE AREA & SCROLLABLE CONTENT) */}
       <div 
-        className="fixed inset-x-0 bottom-6 sm:bottom-8 flex justify-center px-4 pointer-events-auto"
+        className="fixed inset-x-0 bottom-[max(env(safe-area-inset-bottom,0px),0.75rem)] sm:bottom-8 flex justify-center px-3 sm:px-4 pointer-events-auto w-full max-w-[100vw] box-border"
         style={{ zIndex: 100002 }}
       >
         <div 
           role="dialog"
           aria-modal="true"
           onClick={(e) => e.stopPropagation()}
-          className="w-full max-w-xl bg-slate-900/98 border border-emerald-500/60 rounded-3xl p-5 sm:p-6 shadow-2xl shadow-black/95 backdrop-blur-2xl text-slate-100 animate-in slide-in-from-bottom-4 duration-200"
+          className="w-full max-w-[calc(100vw-1.5rem)] sm:max-w-xl bg-slate-900/98 border border-emerald-500/60 rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 shadow-2xl shadow-black/95 backdrop-blur-2xl text-slate-100 flex flex-col max-h-[min(480px,calc(100dvh-1.5rem))] sm:max-h-[80dvh] animate-in slide-in-from-bottom-4 duration-200 box-border overflow-hidden"
         >
           {/* Top Header with Step Counter & Close Button */}
-          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className={`px-2.5 py-1 rounded-full text-xs font-bold border flex items-center gap-1.5 ${step.badgeColor}`}>
-                <StepIcon className="w-3.5 h-3.5" />
-                <span>{step.subtitle}</span>
+          <div className="flex items-center justify-between pb-2.5 sm:pb-3 border-b border-slate-800 shrink-0 gap-2">
+            <div className="flex items-center gap-2 min-w-0 flex-1">
+              <span className={`px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[11px] sm:text-xs font-bold border flex items-center gap-1.5 max-w-[210px] sm:max-w-none shrink truncate ${step.badgeColor}`}>
+                <StepIcon className="w-3.5 h-3.5 shrink-0" />
+                <span className="truncate">{step.subtitle}</span>
               </span>
-              <span className="text-xs font-bold text-slate-400">
+              <span className="text-[11px] sm:text-xs font-bold text-slate-400 shrink-0">
                 Step {currentStepIndex + 1} di {TOUR_STEPS.length}
               </span>
             </div>
 
             <button
               onClick={onClose}
-              className="text-slate-400 hover:text-white p-1 rounded-xl hover:bg-slate-800 transition cursor-pointer"
+              className="text-slate-400 hover:text-white p-1.5 rounded-xl hover:bg-slate-800 transition cursor-pointer shrink-0"
               title="Chiudi tour (Esc)"
+              aria-label="Chiudi tour"
             >
               <X className="w-4 h-4" />
             </button>
           </div>
 
           {/* Step Progress Bar */}
-          <div className="w-full bg-slate-800 h-1.5 rounded-full my-3 overflow-hidden">
+          <div className="w-full bg-slate-800 h-1.5 rounded-full my-2 sm:my-3 overflow-hidden shrink-0">
             <div 
               className="bg-gradient-to-r from-emerald-500 to-blue-500 h-full rounded-full transition-all duration-300"
               style={{ width: `${((currentStepIndex + 1) / TOUR_STEPS.length) * 100}%` }}
             />
           </div>
 
-          {/* Text Content */}
-          <div className="space-y-1.5 my-2.5">
-            <h3 className="text-lg sm:text-xl font-extrabold text-white tracking-tight flex items-center gap-2">
+          {/* Text Content (Never cut off: flexible scroll if needed) */}
+          <div className="space-y-1 my-1 sm:my-2 overflow-y-auto max-h-[32vh] sm:max-h-none pr-1 scrollbar-thin scrollbar-thumb-slate-700">
+            <h3 className="text-base sm:text-lg font-extrabold text-white tracking-tight flex items-center gap-2">
               <span>{step.title}</span>
             </h3>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
@@ -311,15 +330,15 @@ export default function OnboardingTour({
           </div>
 
           {/* Step Indicator Dots */}
-          <div className="flex items-center justify-center gap-1.5 py-1.5">
+          <div className="flex items-center justify-center gap-1.5 py-1 shrink-0">
             {TOUR_STEPS.map((_, idx) => (
               <button
                 key={idx}
                 onClick={() => onStepChange(idx)}
-                className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 cursor-pointer ${
                   idx === currentStepIndex 
-                    ? 'w-6 bg-emerald-400' 
-                    : 'w-2 bg-slate-700 hover:bg-slate-500'
+                    ? 'w-5 sm:w-6 bg-emerald-400' 
+                    : 'w-1.5 sm:w-2 bg-slate-700 hover:bg-slate-500'
                 }`}
                 title={`Vai a step ${idx + 1}`}
               />
@@ -327,7 +346,7 @@ export default function OnboardingTour({
           </div>
 
           {/* Action Controls */}
-          <div className="flex items-center justify-between gap-3 pt-3 border-t border-slate-800 mt-1">
+          <div className="flex items-center justify-between gap-2 pt-2.5 sm:pt-3 border-t border-slate-800 mt-1 shrink-0">
             <button
               type="button"
               onClick={onClose}
@@ -341,7 +360,7 @@ export default function OnboardingTour({
                 <button
                   type="button"
                   onClick={() => onStepChange(currentStepIndex - 1)}
-                  className="flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition cursor-pointer"
+                  className="flex items-center gap-1 px-3 py-1.5 sm:py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition cursor-pointer"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" /> Indietro
                 </button>
@@ -356,7 +375,7 @@ export default function OnboardingTour({
                     onStepChange(currentStepIndex + 1);
                   }
                 }}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-500 hover:to-blue-500 text-white shadow-lg shadow-emerald-950/50 border border-emerald-400/40 transition cursor-pointer"
+                className="flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-500 hover:to-blue-500 text-white shadow-lg shadow-emerald-950/50 border border-emerald-400/40 transition cursor-pointer"
               >
                 {isLastStep ? (
                   <>

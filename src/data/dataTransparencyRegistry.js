@@ -56,14 +56,14 @@ export const DATA_TRANSPARENCY_REGISTRY = [
   },
   {
     id: 'co2_factors_ispra',
-    name: 'Algoritmo Calcolo CO₂ Evitata & Fattori di Emissione',
-    view: 'Executive & Open Data',
+    name: 'Algoritmo Calcolo CO₂ Evitata (ISPRA & Matrici Pisa)',
+    view: 'Executive (Card E.1) & Open Data',
     status: 'REAL_CALCULATED',
-    currentSource: 'Banca Dati Ufficiale ISPRA dei fattori di emissione del trasporto stradale in Italia (0.135 kg CO₂/km)',
-    updateFrequency: 'Continuo su flussi di spostamento',
+    currentSource: 'Formula: Fattore emissivo urbano medio ISPRA (0.135 kg CO₂/km da fetransp.isprambiente.it) applicato sulla rete viaria dell\'Asse Pilota di Pisa (OSM) e sulle matrici O/D del PUMS di Pisa.',
+    updateFrequency: 'Calcolo continuo su tratte e spostamenti',
     officialUrl: 'https://fetransp.isprambiente.it/',
     officialPortalName: 'Banca Dati Fattori Emissione Trasporto ISPRA',
-    requirementsToMakeReal: null // Modello standard certificato
+    requirementsToMakeReal: 'Formula scientifica certificata. Per renderla Live al 100%: installazione di spire ad induzione e varchi Edge AI con conteggio automatico continuo 24/7 sui flussi veicolari e ciclabili.'
   },
   {
     id: 'aci_running_costs',

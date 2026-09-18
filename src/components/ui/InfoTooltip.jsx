@@ -6,7 +6,7 @@ export const DATA_DICTIONARY = {
   'PEBA / IAU': "Piano Eliminazione Barriere Architettoniche. Misura fermate bus e marciapiedi utilizzabili in autonomia da persone in sedia a rotelle, anziani o con passeggini.",
   'PEBA': "Piano Eliminazione Barriere Architettoniche. Misura fermate bus e marciapiedi utilizzabili in autonomia da persone in sedia a rotelle, anziani o con passeggini.",
   'IAU': "Indice di Accessibilità Urbana. Percentuale di percorsi e fermate conformi agli standard di accessibilità per utenze deboli e disabili.",
-  'CO2 Evitata': "Emissioni climalteranti risparmiate grazie allo spostamento su bici, bus o a piedi al posto dell'auto termica privata.",
+  'CO2 Evitata': "Stima ingegneristica: fattore emissivo urbano ISPRA (135 g CO₂/km) applicato sui km reali delle tratte pisane (Asse Pilota OSM) e sullo shift modale del PUMS di Pisa.",
   'Modal Split': "Percentuale di viaggi effettuati con modalità sostenibili rispetto al totale complessivo dei veicoli rilevati.",
   'PM10 / NO2': "Particolato e biossido di azoto. Valori sotto le soglie indicano aria salubre e pieno rispetto dei limiti sanitari UE.",
   'PM10': "Particolato atmosferico con diametro inferiore a 10 micrometri. Limite normativo UE: 50 µg/m³ di media giornaliera.",

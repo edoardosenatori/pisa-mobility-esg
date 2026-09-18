@@ -45,9 +45,7 @@ export default function EsgCard({
   const IconComponent = iconMap[dimension.id] || Leaf;
   const sem = semaphoreStyles[dimension.semaphore?.status] || semaphoreStyles.green;
 
-  const dataStatus = dimension.id === 'environmental' 
-    ? 'REAL_LIVE' 
-    : dimension.id === 'economic' 
+  const dataStatus = (dimension.id === 'environmental' || dimension.id === 'economic')
     ? 'REAL_CALCULATED' 
     : 'VIRTUAL_PUMS';
 
@@ -177,7 +175,13 @@ export default function EsgCard({
                       )}
                     </div>
                     
-                    <div className="text-right shrink-0 flex items-baseline gap-1.5">
+                    <div className="text-right shrink-0 flex items-center gap-1.5">
+                      {dimension.id === 'environmental' && idx === 0 && (
+                        <span className="text-[9px] font-semibold text-emerald-400 bg-emerald-950/80 px-1.5 py-0.5 rounded border border-emerald-800/60 hidden sm:inline-flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                          Live
+                        </span>
+                      )}
                       <span className="text-xs font-bold text-white whitespace-nowrap">{displayVal}</span>
                       {sec.delta && (
                         <span className="text-[10px] font-semibold text-emerald-400">{sec.delta}</span>
@@ -205,9 +209,10 @@ export default function EsgCard({
         <DataSourceBadge
           status={dataStatus}
           size="xs"
+          customLabel={dimension.id === 'environmental' ? 'CALCOLO ISPRA / PUMS' : undefined}
           metricId={
             dimension.id === 'environmental' 
-              ? 'air_quality_pisa' 
+              ? 'co2_factors_ispra' 
               : dimension.id === 'social' 
               ? 'peba_bus_stops' 
               : dimension.id === 'economic' 
@@ -218,7 +223,7 @@ export default function EsgCard({
             if (e?.stopPropagation) e.stopPropagation();
             if (onInspectMetric) {
               const metricMap = {
-                environmental: 'air_quality_pisa',
+                environmental: 'co2_factors_ispra',
                 social: 'peba_bus_stops',
                 economic: 'co2_factors_ispra',
                 governance: 'civic_reports_storage'

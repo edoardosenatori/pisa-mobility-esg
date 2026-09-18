@@ -63,7 +63,19 @@ export const DATA_TRANSPARENCY_REGISTRY = [
     updateFrequency: 'Calcolo continuo su tratte e spostamenti',
     officialUrl: 'https://fetransp.isprambiente.it/',
     officialPortalName: 'Banca Dati Fattori Emissione Trasporto ISPRA',
-    requirementsToMakeReal: 'Formula scientifica certificata. Per renderla Live al 100%: installazione di spire ad induzione e varchi Edge AI con conteggio automatico continuo 24/7 sui flussi veicolari e ciclabili.'
+    requirementsToMakeReal: {
+      owner: 'Comune di Pisa / Pisamo S.r.l. & ISPRA',
+      standard: 'Banca Dati Nazionale Fattori di Emissione Trasporto Stradale (ISPRA/COPERT)',
+      endpointsNeeded: [
+        'https://fetransp.isprambiente.it/',
+        'Sensori IoT: API Spire Conta-Passaggi / Varchi Edge AI'
+      ],
+      administrativeSteps: [
+        'Applicazione del fattore emissivo ciclo urbano (135 g CO₂/km) sulle tratte pisane.',
+        'Integrazione futura con varchi Edge AI per rendere il conteggio passaggi live al 100%.'
+      ],
+      estimatedTime: 'Formula certificata attiva • Varchi Live: 2-3 mesi'
+    }
   },
   {
     id: 'aci_running_costs',

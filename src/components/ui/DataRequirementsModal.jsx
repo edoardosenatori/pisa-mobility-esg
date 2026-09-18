@@ -172,8 +172,8 @@ export default function DataRequirementsModal({ isOpen, onClose, initialMetricId
               </div>
             </div>
 
-            {/* If Already Real */}
-            {currentItem.requirementsToMakeReal === null ? (
+            {/* If Already Real or No Requirements */}
+            {!currentItem.requirementsToMakeReal ? (
               <div className="p-4 rounded-2xl bg-emerald-950/30 border border-emerald-800/50 text-emerald-300 space-y-2">
                 <div className="flex items-center gap-2 font-bold text-xs sm:text-sm text-emerald-200">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
@@ -181,6 +181,16 @@ export default function DataRequirementsModal({ isOpen, onClose, initialMetricId
                 </div>
                 <p className="text-xs text-emerald-300/80 leading-relaxed">
                   Il cruscotto acquisisce i dati in tempo reale dalle API pubbliche o applica le formule ufficiali ISPRA/ACI convalidati per il territorio del Comune di Pisa.
+                </p>
+              </div>
+            ) : typeof currentItem.requirementsToMakeReal === 'string' ? (
+              <div className="p-4 rounded-2xl bg-blue-950/30 border border-blue-800/50 text-blue-300 space-y-2">
+                <div className="flex items-center gap-2 font-bold text-xs sm:text-sm text-blue-200">
+                  <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0" />
+                  <span>Specifiche Metodologiche</span>
+                </div>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  {currentItem.requirementsToMakeReal}
                 </p>
               </div>
             ) : (
@@ -197,28 +207,30 @@ export default function DataRequirementsModal({ isOpen, onClose, initialMetricId
                     <span className="text-slate-400 text-[10px] uppercase font-semibold flex items-center gap-1 mb-1">
                       <Building className="w-3 h-3 text-blue-400" /> Ente / Proprietario
                     </span>
-                    <p className="font-semibold text-white">{currentItem.requirementsToMakeReal.owner}</p>
+                    <p className="font-semibold text-white">{currentItem.requirementsToMakeReal?.owner || 'Comune di Pisa'}</p>
                   </div>
 
                   <div className="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
                     <span className="text-slate-400 text-[10px] uppercase font-semibold flex items-center gap-1 mb-1">
                       <FileCode className="w-3 h-3 text-emerald-400" /> Standard Richiesto
                     </span>
-                    <p className="font-semibold text-white">{currentItem.requirementsToMakeReal.standard}</p>
+                    <p className="font-semibold text-white">{currentItem.requirementsToMakeReal?.standard || 'Standard Ufficiale'}</p>
                   </div>
                 </div>
 
                 {/* Endpoints */}
-                <div className="bg-slate-950/60 p-3 rounded-xl border border-slate-800 space-y-1.5">
-                  <span className="text-slate-400 text-[10px] uppercase font-semibold">Endpoint / Feed da Collegare:</span>
-                  <div className="space-y-1">
-                    {currentItem.requirementsToMakeReal.endpointsNeeded.map((ep, i) => (
-                      <code key={i} className="block text-[11px] text-purple-300 font-mono bg-purple-950/40 p-1.5 rounded border border-purple-900/40 truncate">
-                        {ep}
-                      </code>
-                    ))}
+                {Array.isArray(currentItem.requirementsToMakeReal?.endpointsNeeded) && currentItem.requirementsToMakeReal.endpointsNeeded.length > 0 && (
+                  <div className="bg-slate-950/60 p-3 rounded-xl border border-slate-800 space-y-1.5">
+                    <span className="text-slate-400 text-[10px] uppercase font-semibold">Endpoint / Feed da Collegare:</span>
+                    <div className="space-y-1">
+                      {currentItem.requirementsToMakeReal.endpointsNeeded.map((ep, i) => (
+                        <code key={i} className="block text-[11px] text-purple-300 font-mono bg-purple-950/40 p-1.5 rounded border border-purple-900/40 truncate">
+                          {ep}
+                        </code>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             )}
 
